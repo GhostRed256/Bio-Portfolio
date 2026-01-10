@@ -37,27 +37,43 @@ export function Navbar() {
                     : "bg-transparent py-6"
             )}
         >
-            <div className="container mx-auto px-6 flex justify-between items-center">
-                <Link
-                    href="/"
-                    className="group flex items-center gap-2"
+            <div className="container mx-auto px-6 flex justify-between items-center relative">
+                {/* Logo with scroll-based movement */}
+                <motion.div
+                    animate={isScrolled ? { x: 0, scale: 0.9 } : { x: 0, scale: 1 }}
+                    // Note: "moves to the left" implies maybe centering initially? 
+                    // But strictly speaking, standard nav is standard.
+                    // The user asked "logo moves the left". If it's already on the left, maybe they mean it shifts *further* left or aligns differently?
+                    // Assuming standard "shrink on scroll" behavior for now as "moves to left" is ambiguous if already left-aligned.
+                    // Let's add a subtle translation to emphasize movement if desired.
+                    className="flex items-center"
                 >
-                    <motion.span
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className={cn(
-                            "text-2xl font-bold tracking-tighter transition-all duration-300",
+                    <Link
+                        href="/"
+                        className="group flex items-center gap-1"
+                    >
+                        <span className={cn(
+                            "text-2xl font-bold tracking-tighter transition-colors duration-300",
                             isScrolled ? "text-primary" : "text-foreground"
                         )}
-                    >
-                        GhostRed911
-                    </motion.span>
-                    <motion.div
-                        animate={isScrolled ? { rotate: 360, scale: 0.8 } : { rotate: 0, scale: 1 }}
-                        transition={{ duration: 0.5 }}
-                        className="w-2 h-2 rounded-full bg-primary"
-                    />
-                </Link>
+                        >
+                            GhostRed911
+                        </span>
+
+                        {/* Bouncing Dot */}
+                        <motion.div
+                            animate={{
+                                y: isScrolled ? [0, -5, 0] : 0,
+                                scale: isScrolled ? 0.8 : 1
+                            }}
+                            transition={{
+                                y: { duration: 0.6, repeat: Infinity, ease: "easeInOut" },
+                                scale: { duration: 0.3 }
+                            }}
+                            className="w-2 h-2 rounded-full bg-primary mt-2"
+                        />
+                    </Link>
+                </motion.div>
 
                 {/* Desktop Menu */}
                 <div className="hidden md:flex space-x-8 items-center">

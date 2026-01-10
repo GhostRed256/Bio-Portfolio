@@ -16,8 +16,17 @@ export function Hero() {
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                 className="z-10"
             >
-                <h2 className="text-xl md:text-2xl font-medium tracking-tight text-muted-foreground mb-4">
-                    Hello, I'm Ritesh Dey.
+                <h2 className="text-xl md:text-2xl font-medium tracking-tight text-muted-foreground mb-4 min-h-[2rem]">
+                    {Array.from("Hello, I'm Ritesh Dey.").map((char, index) => (
+                        <motion.span
+                            key={index}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: index * 0.05 }}
+                        >
+                            {char}
+                        </motion.span>
+                    ))}
                 </h2>
                 <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter mb-8 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/50">
                     Artist & <br /> Developer.
