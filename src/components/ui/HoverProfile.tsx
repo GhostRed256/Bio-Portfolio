@@ -38,7 +38,7 @@ export function HoverProfile({ type, href, children }: HoverProfileProps) {
         },
         instagram: {
             name: "Ritesh Dey",
-            username: "@ritesh_dey", // Placeholder, assume similar handle or update if known
+            username: "@mr.riteshdey", // Updated handle
             bio: "Casual developer who does Android dev and Machine Learning, currently doing Fullstack using MERN stack.",
             location: "India",
             stats: [
