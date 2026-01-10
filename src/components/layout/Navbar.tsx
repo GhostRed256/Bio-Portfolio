@@ -40,9 +40,23 @@ export function Navbar() {
             <div className="container mx-auto px-6 flex justify-between items-center">
                 <Link
                     href="/"
-                    className="text-2xl font-bold tracking-tighter hover:opacity-80 transition-opacity"
+                    className="group flex items-center gap-2"
                 >
-                    Portfolio.
+                    <motion.span
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className={cn(
+                            "text-2xl font-bold tracking-tighter transition-all duration-300",
+                            isScrolled ? "text-primary" : "text-foreground"
+                        )}
+                    >
+                        GhostRed911
+                    </motion.span>
+                    <motion.div
+                        animate={isScrolled ? { rotate: 360, scale: 0.8 } : { rotate: 0, scale: 1 }}
+                        transition={{ duration: 0.5 }}
+                        className="w-2 h-2 rounded-full bg-primary"
+                    />
                 </Link>
 
                 {/* Desktop Menu */}
