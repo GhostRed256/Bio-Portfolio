@@ -229,6 +229,105 @@ function RainDrop({ delay }: { delay: number }) {
     );
 }
 
+function Firefly({ delay }: { delay: number }) {
+    const [position, setPosition] = useState({
+        x: Math.random() * 100,
+        y: Math.random() * 100
+    });
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setPosition({
+                x: Math.random() * 100,
+                y: Math.random() * 100
+            });
+        }, 8000 + Math.random() * 4000);
+        return () => clearInterval(interval);
+    }, []);
+
+    return (
+        <motion.div
+            className="absolute w-1.5 h-1.5 rounded-full bg-yellow-200"
+            style={{
+                left: `${position.x}%`,
+                top: `${position.y}%`,
+                boxShadow: "0 0 8px #fef08a, 0 0 16px #fef08a"
+            }}
+            animate={{
+                x: [0, (Math.random() - 0.5) * 100, 0],
+                y: [0, (Math.random() - 0.5) * 100, 0],
+                opacity: [0.2, 1, 0.2],
+                scale: [0.8, 1.2, 0.8]
+            }}
+            transition={{
+                duration: 10 + Math.random() * 10,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay
+            }}
+        />
+    );
+}
+
+function RealisticSun() {
+    return (
+        <div className="absolute top-[-50px] right-[-50px] pointer-events-none">
+            {/* Sun Core */}
+            <motion.div
+                className="w-40 h-40 bg-yellow-300 rounded-full blur-2xl relative z-10"
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            >
+                <div className="absolute inset-0 bg-white/50 rounded-full blur-xl" />
+            </motion.div>
+
+            {/* Sun Rays/Streaks */}
+            <div className="absolute inset-0 flex items-center justify-center">
+                {Array.from({ length: 12 }).map((_, i) => (
+                    <motion.div
+                        key={i}
+                        className="absolute w-[2px] bg-gradient-to-t from-transparent via-yellow-200/40 to-transparent origin-bottom"
+                        style={{
+                            height: 600 + Math.random() * 200,
+                            transform: `rotate(${i * 30}deg)`,
+                            bottom: "50%",
+                        }}
+                        animate={{
+                            opacity: [0.1, 0.4, 0.1],
+                            scaleY: [0.8, 1.2, 0.8],
+                        }}
+                        transition={{
+                            duration: 3 + Math.random() * 2,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: i * 0.2
+                        }}
+                    />
+                ))}
+            </div>
+
+            {/* Slow overall rotation */}
+            <motion.div
+                className="absolute inset-0"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+            >
+                {Array.from({ length: 8 }).map((_, i) => (
+                    <div
+                        key={i}
+                        className="absolute w-[1000px] h-1 bg-gradient-to-r from-yellow-100/10 via-yellow-200/5 to-transparent origin-left"
+                        style={{
+                            transform: `rotate(${i * 45}deg)`,
+                            left: "80px",
+                            top: "80px"
+                        }}
+                    />
+                ))}
+            </motion.div>
+        </div>
+    );
+}
+
 function Ghost({ delay }: { delay: number }) {
     const x = Math.random() * 100;
     const y = Math.random() * 100;
@@ -241,16 +340,6 @@ function Ghost({ delay }: { delay: number }) {
         >
             👻
         </motion.div>
-    );
-}
-
-function SunRay() {
-    return (
-        <motion.div
-            className="absolute top-0 right-0 w-[500px] h-[500px] bg-yellow-400/10 rounded-full blur-3xl pointer-events-none"
-            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        />
     );
 }
 
@@ -305,7 +394,9 @@ export function FestiveEffects() {
             {theme === 'Autumn' && Array.from({ length: 12 }).map((_, i) => <AutumnLeaf key={i} delay={i * 0.8} />)}
             {theme === 'Monsoon' && Array.from({ length: 40 }).map((_, i) => <RainDrop key={i} delay={i * 0.1} />)}
             {theme === 'Halloween' && Array.from({ length: 8 }).map((_, i) => <Ghost key={i} delay={i * 0.5} />)}
-            {theme === 'Summer' && <SunRay />}
+            {theme === 'Summer' && (
+                isDay ? <RealisticSun /> : Array.from({ length: 30 }).map((_, i) => <Firefly key={i} delay={i * 0.2} />)
+            )}
         </div>
     );
 }
