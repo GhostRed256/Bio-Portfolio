@@ -13,6 +13,8 @@ const navLinks = [
     { name: "Contact", href: "#contact" },
 ];
 
+import { SeasonalGreeting } from "@/components/ui/SeasonalGreeting";
+
 export function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -26,114 +28,118 @@ export function Navbar() {
     }, []);
 
     return (
-        <motion.nav
+        <motion.header
             initial={{ y: -100 }}
             animate={{ y: 0 }}
             transition={{ duration: 0.5 }}
             className={cn(
-                "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out border-b border-transparent",
+                "fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out",
                 isScrolled
-                    ? "bg-white/80 dark:bg-black/80 backdrop-blur-md border-border py-4"
-                    : "bg-transparent py-6"
+                    ? "bg-white/90 dark:bg-black/90 backdrop-blur-xl border-b border-border shadow-sm py-3"
+                    : "bg-transparent py-0"
             )}
         >
-            <div className="container mx-auto px-6 flex justify-between items-center relative">
-                {/* Logo with scroll-based movement */}
-                <motion.div
-                    animate={isScrolled ? { x: 0, scale: 0.9 } : { x: 0, scale: 1 }}
-                    // Note: "moves to the left" implies maybe centering initially? 
-                    // But strictly speaking, standard nav is standard.
-                    // The user asked "logo moves the left". If it's already on the left, maybe they mean it shifts *further* left or aligns differently?
-                    // Assuming standard "shrink on scroll" behavior for now as "moves to left" is ambiguous if already left-aligned.
-                    // Let's add a subtle translation to emphasize movement if desired.
-                    className="flex items-center"
-                >
-                    <Link
-                        href="/"
-                        className="group flex items-center gap-1"
+            <AnimatePresence>
+                {!isScrolled && <SeasonalGreeting />}
+            </AnimatePresence>
+
+            <nav className={cn(
+                "transition-all duration-300",
+                !isScrolled && "pt-4 pb-6"
+            )}>
+                <div className="container mx-auto px-6 flex justify-between items-center relative">
+                    {/* Logo with scroll-based movement */}
+                    <motion.div
+                        animate={isScrolled ? { scale: 0.95 } : { scale: 1 }}
+                        className="flex items-center"
                     >
-                        <span className={cn(
-                            "text-2xl font-bold tracking-tighter transition-colors duration-300",
-                            isScrolled ? "text-primary" : "text-foreground"
-                        )}
-                        >
-                            GhostRed911
-                        </span>
-
-                        {/* Bouncing Dot */}
-                        <motion.div
-                            animate={{
-                                y: isScrolled ? [0, -5, 0] : 0,
-                                scale: isScrolled ? 0.8 : 1
-                            }}
-                            transition={{
-                                y: { duration: 0.6, repeat: Infinity, ease: "easeInOut" },
-                                scale: { duration: 0.3 }
-                            }}
-                            className="w-2 h-2 rounded-full bg-primary mt-2"
-                        />
-                    </Link>
-                </motion.div>
-
-                {/* Desktop Menu */}
-                <div className="hidden md:flex space-x-8 items-center">
-                    {navLinks.map((link) => (
                         <Link
-                            key={link.name}
-                            href={link.href}
-                            className="text-sm font-medium hover:text-muted-foreground transition-colors"
+                            href="/"
+                            className="group flex items-center gap-1"
                         >
-                            {link.name}
+                            <span className={cn(
+                                "text-2xl font-bold tracking-tighter transition-colors duration-300",
+                                isScrolled ? "text-primary" : "text-foreground"
+                            )}
+                            >
+                                GhostRed911
+                            </span>
+
+                            {/* Bouncing Dot */}
+                            <motion.div
+                                animate={{
+                                    y: isScrolled ? [0, -5, 0] : 0,
+                                    scale: isScrolled ? 0.8 : 1
+                                }}
+                                transition={{
+                                    y: { duration: 0.6, repeat: Infinity, ease: "easeInOut" },
+                                    scale: { duration: 0.3 }
+                                }}
+                                className="w-2 h-2 rounded-full bg-primary mt-2"
+                            />
                         </Link>
-                    ))}
-                    <Link
-                        href="#contact"
-                        className="px-4 py-2 bg-foreground text-background rounded-full text-sm font-medium hover:opacity-90 transition-opacity"
+                    </motion.div>
+
+                    {/* Desktop Menu */}
+                    <div className="hidden md:flex space-x-8 items-center">
+                        {navLinks.map((link) => (
+                            <Link
+                                key={link.name}
+                                href={link.href}
+                                className="text-sm font-semibold hover:text-primary transition-colors"
+                            >
+                                {link.name}
+                            </Link>
+                        ))}
+                        <Link
+                            href="#contact"
+                            className="px-5 py-2.5 bg-primary text-primary-foreground rounded-full text-sm font-bold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all"
+                        >
+                            Let's Talk
+                        </Link>
+                    </div>
+
+                    {/* Mobile Toggle */}
+                    <button
+                        className="md:hidden p-2 text-foreground"
+                        onClick={() => setIsOpen(!isOpen)}
                     >
-                        Let's Talk
-                    </Link>
+                        {isOpen ? <X size={24} /> : <Menu size={24} />}
+                    </button>
                 </div>
 
-                {/* Mobile Toggle */}
-                <button
-                    className="md:hidden p-2 text-foreground"
-                    onClick={() => setIsOpen(!isOpen)}
-                >
-                    {isOpen ? <X size={24} /> : <Menu size={24} />}
-                </button>
-            </div>
-
-            {/* Mobile Menu */}
-            <AnimatePresence>
-                {isOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="md:hidden bg-background border-b border-border overflow-hidden"
-                    >
-                        <div className="flex flex-col p-6 space-y-4">
-                            {navLinks.map((link) => (
+                {/* Mobile Menu */}
+                <AnimatePresence>
+                    {isOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="md:hidden bg-background/95 backdrop-blur-lg border-b border-border overflow-hidden"
+                        >
+                            <div className="flex flex-col p-6 space-y-4">
+                                {navLinks.map((link) => (
+                                    <Link
+                                        key={link.name}
+                                        href={link.href}
+                                        className="text-lg font-medium hover:text-primary transition-colors"
+                                        onClick={() => setIsOpen(false)}
+                                    >
+                                        {link.name}
+                                    </Link>
+                                ))}
                                 <Link
-                                    key={link.name}
-                                    href={link.href}
-                                    className="text-lg font-medium hover:text-muted-foreground transition-colors"
+                                    href="#contact"
+                                    className="inline-block text-center w-full px-4 py-3 bg-primary text-primary-foreground rounded-lg text-lg font-medium hover:opacity-90 transition-opacity font-bold"
                                     onClick={() => setIsOpen(false)}
                                 >
-                                    {link.name}
+                                    Let's Talk
                                 </Link>
-                            ))}
-                            <Link
-                                href="#contact"
-                                className="inline-block text-center w-full px-4 py-3 bg-foreground text-background rounded-lg text-lg font-medium hover:opacity-90 transition-opacity"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                Let's Talk
-                            </Link>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </motion.nav>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </nav>
+        </motion.header>
     );
 }

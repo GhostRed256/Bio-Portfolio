@@ -4,7 +4,6 @@ import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SeasonalThemeProvider } from "@/hooks/useSeasonalTheme";
-import { SeasonalGreeting } from "@/components/ui/SeasonalGreeting";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,7 +31,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground theme-transition`}
       >
         <SeasonalThemeProvider>
-          <SeasonalGreeting />
           <Navbar />
           <main className="min-h-screen pt-20">
             {children}

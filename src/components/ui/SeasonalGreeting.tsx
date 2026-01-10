@@ -83,17 +83,19 @@ export function SeasonalGreeting() {
         <AnimatePresence mode="wait">
             <motion.div
                 key={greeting}
-                initial={{ y: -50, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: -20, opacity: 0 }}
-                className="w-full py-3 px-6 text-center text-[13px] md:text-sm font-bold tracking-wide border-b border-white/10 backdrop-blur-xl bg-primary/10 text-primary shadow-lg"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="w-full py-5 px-6 text-center text-[11px] md:text-xs font-black uppercase tracking-[0.2em] bg-primary/5 text-primary/70"
             >
-                <motion.span
-                    animate={{ opacity: [0.7, 1, 0.7] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                >
-                    {greeting}
-                </motion.span>
+                <div className="container mx-auto">
+                    <motion.span
+                        animate={{ opacity: [0.4, 1, 0.4] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                        {greeting}
+                    </motion.span>
+                </div>
             </motion.div>
         </AnimatePresence>
     );
