@@ -135,7 +135,7 @@ export function WeatherEffects() {
                                 ease: "linear",
                                 delay: Math.random() * 5
                             }}
-                            className="absolute bg-white w-2 h-2 rounded-full blur-[1px]"
+                            className="absolute bg-sky-100 w-2 h-2 rounded-full blur-[1px] shadow-[0_0_4px_theme(colors.sky.300)]"
                             style={{
                                 left: `${Math.random() * 100}%`
                             }}

@@ -38,30 +38,35 @@ export function EasterEggTrigger() {
 
     return (
         <>
-            <motion.button
-                onClick={handleClick}
-                className="group flex items-center gap-1.5 px-2 py-1 rounded-full text-muted-foreground/30 hover:text-primary/60 transition-colors cursor-default hover:cursor-pointer"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                title="Let's play?"
-            >
-                <Gamepad2
-                    size={12}
-                    className="opacity-50 group-hover:opacity-100 transition-opacity"
-                />
-                <span className="text-[10px] font-medium tracking-wide">
-                    let&apos;s play
-                </span>
+            <AnimatePresence>
+                {!isGameOpen && (
+                    <motion.button
+                        layoutId="tetris-game"
+                        onClick={handleClick}
+                        className="group flex items-center gap-1.5 px-2 py-1 rounded-full text-muted-foreground/30 hover:text-primary/60 transition-colors cursor-default hover:cursor-pointer"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        title="Let's play?"
+                    >
+                        <Gamepad2
+                            size={12}
+                            className="opacity-50 group-hover:opacity-100 transition-opacity"
+                        />
+                        <span className="text-[10px] font-medium tracking-wide">
+                            let&apos;s play
+                        </span>
 
-                {/* Micro progress bar */}
-                <div className="w-8 h-[2px] bg-muted/20 rounded-full overflow-hidden ml-1">
-                    <motion.div
-                        className="h-full bg-primary"
-                        initial={{ width: 0 }}
-                        animate={{ width: `${(clickCount / REQUIRED_CLICKS) * 100}%` }}
-                    />
-                </div>
-            </motion.button>
+                        {/* Micro progress bar */}
+                        <div className="w-8 h-[2px] bg-muted/20 rounded-full overflow-hidden ml-1">
+                            <motion.div
+                                className="h-full bg-primary"
+                                initial={{ width: 0 }}
+                                animate={{ width: `${(clickCount / REQUIRED_CLICKS) * 100}%` }}
+                            />
+                        </div>
+                    </motion.button>
+                )}
+            </AnimatePresence>
 
             <TetrisGame
                 isOpen={isGameOpen}

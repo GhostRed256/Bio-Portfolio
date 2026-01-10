@@ -6,8 +6,9 @@ import { useSeasonalTheme } from "@/hooks/useSeasonalTheme";
 
 // Component Definitions
 function Cracker({ delay }: { delay: number }) {
-    const [position] = useState({ x: Math.random() * 100, startY: 80 + Math.random() * 20 });
-    const colors = ["#FFD700", "#FF6B6B", "#4ECDC4", "#FF69B4", "#FFA500", "#9B59B6"];
+    // Rocket shoots to the top 20-40% of the screen
+    const [position] = useState({ x: 10 + Math.random() * 80, startY: 75 + Math.random() * 15 });
+    const colors = ["#FFD700", "#FF4500", "#00FF7F", "#00BFFF", "#FF1493", "#9400D3", "#FFFFFF"];
 
     return (
         <motion.div
@@ -15,25 +16,72 @@ function Cracker({ delay }: { delay: number }) {
             style={{ left: `${position.x}%`, bottom: 0 }}
             initial={{ y: 0, opacity: 1 }}
             animate={{ y: `-${position.startY}vh`, opacity: [1, 1, 0] }}
-            transition={{ duration: 1.5, delay, ease: "easeOut" }}
+            transition={{ duration: 0.8, delay, ease: "easeOut" }}
         >
-            <motion.div className="w-1 h-8 bg-gradient-to-t from-orange-400 to-yellow-200 rounded-full" initial={{ scaleY: 1 }} animate={{ scaleY: 0 }} transition={{ duration: 1.5, delay }} />
-            {Array.from({ length: 12 }).map((_, i) => {
-                const angle = (i / 12) * 360;
-                const distance = 30 + Math.random() * 50;
+            {/* Rocket Trail */}
+            <motion.div
+                className="w-1 h-6 bg-gradient-to-t from-orange-500 via-yellow-300 to-white rounded-full brightness-150 drop-shadow-[0_0_8px_rgba(255,165,0,0.8)]"
+                initial={{ scaleY: 1 }}
+                animate={{ scaleY: 0, opacity: 0 }}
+                transition={{ duration: 0.2, delay: delay + 1.1 }} // Disappear just before burst
+            />
+
+            {/* Explosion */}
+            {Array.from({ length: 24 }).map((_, i) => { // More particles
+                const angle = (i / 24) * 360;
+                const distance = 80 + Math.random() * 100; // Bigger burst
                 const color = colors[Math.floor(Math.random() * colors.length)];
                 return (
                     <motion.div
                         key={i}
-                        className="absolute w-2 h-2 rounded-full"
-                        style={{ backgroundColor: color, boxShadow: `0 0 6px ${color}` }}
+                        className="absolute w-3 h-3 rounded-full"
+                        style={{ backgroundColor: color, boxShadow: `0 0 10px ${color}, 0 0 20px ${color}` }} // Glowing particles
                         initial={{ scale: 0, x: 0, y: 0, opacity: 0 }}
-                        animate={{ scale: [0, 1, 0], x: Math.cos(angle * Math.PI / 180) * distance, y: Math.sin(angle * Math.PI / 180) * distance, opacity: [0, 1, 0] }}
-                        transition={{ duration: 1, delay: delay + 1.2, ease: "easeOut" }}
+                        animate={{
+                            scale: [0, 1.5, 0],
+                            x: Math.cos(angle * Math.PI / 180) * distance,
+                            y: Math.sin(angle * Math.PI / 180) * distance,
+                            opacity: [0, 1, 0]
+                        }}
+                        transition={{ duration: 1.8, delay: delay + 1.2, ease: "easeOut" }}
                     />
                 );
             })}
         </motion.div>
+    );
+}
+
+function Petal({ delay }: { delay: number }) {
+    const [windowHeight, setWindowHeight] = useState(800);
+    const x = Math.random() * 100;
+    const colors = ["#FF9933", "#FFFFFF", "#138808"]; // Tricolor petals
+    const color = colors[Math.floor(Math.random() * colors.length)];
+
+    useEffect(() => setWindowHeight(window.innerHeight), []);
+
+    return (
+        <motion.div
+            className="absolute w-4 h-4 rounded-tl-full rounded-br-full opacity-80"
+            style={{
+                left: `${x}%`,
+                top: -20,
+                backgroundColor: color,
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+            }}
+            animate={{
+                y: [0, windowHeight + 50],
+                rotate: [0, 360],
+                x: [0, Math.sin(delay * 2) * 100, 0],
+                rotateX: [0, 180, 360],
+                rotateY: [0, 180, 360]
+            }}
+            transition={{
+                duration: 6 + Math.random() * 4,
+                delay,
+                repeat: Infinity,
+                ease: "linear"
+            }}
+        />
     );
 }
 
@@ -106,8 +154,8 @@ function Snowflake({ delay }: { delay: number }) {
 
     return (
         <motion.div
-            className="absolute text-white/80 text-xl"
-            style={{ left: `${x}%`, top: -20 }}
+            className="absolute text-xl"
+            style={{ left: `${x}%`, top: -20, color: '#A5F3FC', textShadow: '0 0 4px #38bdf8' }}
             animate={{ y: [0, windowHeight + 50], x: [0, Math.sin(delay * 5) * 50], rotate: [0, 360] }}
             transition={{ duration: 10 + Math.random() * 5, delay, repeat: Infinity, ease: "linear" }}
         >
@@ -212,7 +260,7 @@ export function FestiveEffects() {
     const [crackers, setCrackers] = useState<number[]>([]);
 
     useEffect(() => {
-        if (theme !== 'Diwali') { setCrackers([]); return; }
+        if (theme !== 'Diwali' && theme !== 'NewYear') { setCrackers([]); return; }
         const interval = setInterval(() => {
             setCrackers(prev => {
                 const newId = Date.now();
@@ -229,12 +277,14 @@ export function FestiveEffects() {
             {(theme === 'IndependenceDay' || theme === 'RepublicDay') && <TricolorBackground />}
 
             <AnimatePresence>
-                {theme === 'Diwali' && (
+                {(theme === 'Diwali' || theme === 'NewYear') && (
                     <>
                         {crackers.map((id, i) => <Cracker key={id} delay={i * 0.3} />)}
-                        <div className="absolute bottom-0 left-0 right-0 h-20">
-                            {Array.from({ length: 15 }).map((_, i) => <Diya key={i} x={5 + i * 6.5} delay={i * 0.1} />)}
-                        </div>
+                        {theme === 'Diwali' && (
+                            <div className="absolute bottom-0 left-0 right-0 h-20">
+                                {Array.from({ length: 15 }).map((_, i) => <Diya key={i} x={5 + i * 6.5} delay={i * 0.1} />)}
+                            </div>
+                        )}
                         <LightString colors={lights} y={5} />
                     </>
                 )}
@@ -249,7 +299,9 @@ export function FestiveEffects() {
 
             {theme === 'Valentine' && Array.from({ length: 15 }).map((_, i) => <FloatingHeart key={i} delay={i * 0.8} />)}
             {theme === 'NewYear' && Array.from({ length: 30 }).map((_, i) => <Sparkle key={i} delay={i * 0.2} />)}
-            {(theme === 'Winter' && !isDay) && Array.from({ length: 20 }).map((_, i) => <Snowflake key={i} delay={i * 0.8} />)}
+            {/* Show snow in Winter regardless of Day/Night, but heavily styled in component to be visible */}
+            {theme === 'Winter' && Array.from({ length: 20 }).map((_, i) => <Snowflake key={i} delay={i * 0.8} />)}
+            {(theme === 'IndependenceDay' || theme === 'RepublicDay') && Array.from({ length: 25 }).map((_, i) => <Petal key={i} delay={i * 0.5} />)}
             {theme === 'Spring' && Array.from({ length: 15 }).map((_, i) => <Flower key={i} delay={i * 0.5} />)}
             {theme === 'Autumn' && Array.from({ length: 12 }).map((_, i) => <AutumnLeaf key={i} delay={i * 0.8} />)}
             {theme === 'Monsoon' && Array.from({ length: 40 }).map((_, i) => <RainDrop key={i} delay={i * 0.1} />)}
