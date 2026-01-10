@@ -16,14 +16,13 @@ function Cracker({ delay }: { delay: number }) {
             style={{ left: `${position.x}%`, bottom: 0 }}
             initial={{ y: 0, opacity: 1 }}
             animate={{ y: `-${position.startY}vh`, opacity: [1, 1, 0] }}
-            transition={{ duration: 0.8, delay, ease: "easeOut" }}
+            transition={{ duration: 0.7, delay, ease: "circOut" }}
         >
-            {/* Rocket Trail */}
             <motion.div
-                className="w-1 h-6 bg-gradient-to-t from-orange-500 via-yellow-300 to-white rounded-full brightness-150 drop-shadow-[0_0_8px_rgba(255,165,0,0.8)]"
+                className="w-1.5 h-10 bg-gradient-to-t from-orange-600 via-yellow-400 to-white rounded-full brightness-150 drop-shadow-[0_0_12px_rgba(255,165,0,0.9)]"
                 initial={{ scaleY: 1 }}
-                animate={{ scaleY: 0, opacity: 0 }}
-                transition={{ duration: 0.2, delay: delay + 1.1 }} // Disappear just before burst
+                animate={{ scaleY: [1, 1.2, 0], opacity: [1, 1, 0] }}
+                transition={{ duration: 0.7, delay }}
             />
 
             {/* Explosion */}
@@ -35,15 +34,15 @@ function Cracker({ delay }: { delay: number }) {
                     <motion.div
                         key={i}
                         className="absolute w-3 h-3 rounded-full"
-                        style={{ backgroundColor: color, boxShadow: `0 0 10px ${color}, 0 0 20px ${color}` }} // Glowing particles
+                        style={{ backgroundColor: color, boxShadow: `0 0 15px ${color}, 0 0 30px ${color}` }} // Glowing particles
                         initial={{ scale: 0, x: 0, y: 0, opacity: 0 }}
                         animate={{
-                            scale: [0, 1.5, 0],
+                            scale: [0, 1.8, 0],
                             x: Math.cos(angle * Math.PI / 180) * distance,
                             y: Math.sin(angle * Math.PI / 180) * distance,
                             opacity: [0, 1, 0]
                         }}
-                        transition={{ duration: 1.8, delay: delay + 1.2, ease: "easeOut" }}
+                        transition={{ duration: 2, delay: delay + 0.7, ease: "easeOut" }}
                     />
                 );
             })}

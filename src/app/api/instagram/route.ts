@@ -10,31 +10,34 @@ export async function GET(request: NextRequest) {
 
     try {
         // Method: Instagram allows getting the high-res image by appending /media/?size=l
-        // We follow the redirect to get the actual CDN URL.
-        const cleanPostUrl = url.split("?")[0]; // remove existing query params
-        const mediaUrl = `${cleanPostUrl.endsWith("/") ? cleanPostUrl : cleanPostUrl + "/"}media/?size=l`;
+        // We let fetch follow the redirect and then take the final URL.
+        const cleanPostUrl = url.split("?")[0].replace(/\/+$/, "");
+        const mediaUrl = `${cleanPostUrl}/media/?size=l`;
 
         const response = await fetch(mediaUrl, {
-            method: "HEAD",
-            redirect: "manual",
+            method: "GET",
             headers: {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
             }
         });
 
-        // The URL is in the 'location' header (302 redirect)
-        const finalImageUrl = response.headers.get("location");
+        // The response URL is the final URL after following redirects
+        const finalImageUrl = response.url;
 
-        if (finalImageUrl) {
+        if (finalImageUrl && finalImageUrl.includes("cdninstagram.com")) {
             return NextResponse.json({ imageUrl: finalImageUrl });
         }
 
-        // Fallback for some Reels or specific post types: check if it's already a 200 (direct image link returned)
-        if (response.status === 200 && response.url.includes("cdninstagram")) {
-            return NextResponse.json({ imageUrl: response.url });
+        // Second fallback: Try to scrape og:image if redirect didn't work as expected
+        const html = await response.text();
+        const ogImageMatch = html.match(/<meta property="og:image" content="([^"]+)"/);
+        const imageUrl = ogImageMatch?.[1]?.replace(/&amp;/g, "&");
+
+        if (imageUrl) {
+            return NextResponse.json({ imageUrl });
         }
 
-        return NextResponse.json({ error: "Unable to find media location" }, { status: 404 });
+        return NextResponse.json({ error: "Unable to find media source" }, { status: 404 });
     } catch (error) {
         console.error("Instagram proxy error:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
