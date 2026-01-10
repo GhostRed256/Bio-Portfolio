@@ -97,4 +97,33 @@
   .glass {
     @apply bg-white/70 dark:bg-black/70 backdrop-blur-md border border-white/20 dark:border-white/10;
   }
+
+  .pastel-glass {
+    @apply bg-white/30 dark:bg-black/30 backdrop-blur-xl border border-white/40 dark:border-white/20 shadow-lg;
+  }
+
+  .pastel-glass-pink {
+    @apply bg-pink-100/40 dark:bg-pink-900/20 backdrop-blur-xl border border-pink-200/50 dark:border-pink-500/20 shadow-lg;
+  }
+
+  .pastel-glass-blue {
+    @apply bg-blue-100/40 dark:bg-blue-900/20 backdrop-blur-xl border border-blue-200/50 dark:border-blue-500/20 shadow-lg;
+  }
+
+  .pastel-glass-green {
+    @apply bg-green-100/40 dark:bg-green-900/20 backdrop-blur-xl border border-green-200/50 dark:border-green-500/20 shadow-lg;
+  }
+
+  .pastel-glass-purple {
+    @apply bg-purple-100/40 dark:bg-purple-900/20 backdrop-blur-xl border border-purple-200/50 dark:border-purple-500/20 shadow-lg;
+  }
+
+  .pastel-glass-amber {
+    @apply bg-amber-100/40 dark:bg-amber-900/20 backdrop-blur-xl border border-amber-200/50 dark:border-amber-500/20 shadow-lg;
+  }
+
+  /* Smooth theme transitions */
+  .theme-transition {
+    @apply transition-colors duration-500 ease-in-out;
+  }
 }

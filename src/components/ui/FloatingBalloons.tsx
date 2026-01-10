@@ -22,6 +22,7 @@ const pastelColors = [
 
 export function FloatingBalloons() {
     const [balloons, setBalloons] = useState<Balloon[]>([]);
+    const [isSpecialDay, setIsSpecialDay] = useState(false);
     const { scrollY } = useScroll();
 
     // Transform scroll value to vertical movement
@@ -31,6 +32,13 @@ export function FloatingBalloons() {
     const y3 = useTransform(scrollY, [0, 2000], [0, -800]);
 
     useEffect(() => {
+        // Check if today is September 26
+        const today = new Date();
+        const isSept26 = today.getMonth() === 8 && today.getDate() === 26; // Month is 0-indexed
+        setIsSpecialDay(isSept26);
+
+        if (!isSept26) return;
+
         // Generate random balloons on client side only
         const newBalloons = Array.from({ length: 15 }).map((_, i) => ({
             id: i,
@@ -42,6 +50,9 @@ export function FloatingBalloons() {
         setBalloons(newBalloons);
     }, []);
 
+    // Don't render anything if not September 26
+    if (!isSpecialDay) return null;
+
     return (
         <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
             {balloons.map((balloon, index) => {
@@ -51,9 +62,9 @@ export function FloatingBalloons() {
                 return (
                     <motion.div
                         key={balloon.id}
-                        initial={{ bottom: -100, opacity: 0 }}
+                        initial={{ top: "100vh", opacity: 0 }}
                         animate={{
-                            bottom: "120vh",
+                            top: "-20vh",
                             opacity: [0, 0.8, 0.8, 0],
                             x: [0, Math.random() * 50 - 25, 0] // Gentle sway
                         }}
