@@ -44,7 +44,7 @@ export function Hero() {
                     </Link>
                     <Link
                         href="#art"
-                        className="px-8 py-3 rounded-full border border-border bg-background text-foreground font-medium hover:bg-muted transition-colors"
+                        className="px-8 py-3 rounded-full border border-border bg-background text-foreground font-medium hover:bg-foreground hover:text-background transition-colors"
                     >
                         See Artworks
                     </Link>
