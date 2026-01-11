@@ -210,26 +210,76 @@ function Flower({ delay }: { delay: number }) {
     );
 }
 
+
 function AutumnLeaf({ delay }: { delay: number }) {
     const [windowHeight, setWindowHeight] = useState(800);
     const [x] = useState(() => Math.random() * 100);
-    const leaves = ["🍂", "🍁"];
-    const [leaf] = useState(() => leaves[Math.floor(Math.random() * leaves.length)]);
+    const [leafType] = useState(() => Math.floor(Math.random() * 4)); // 0: Maple, 1: Oak, 2: Side, 3: Traditional
+    const [rotationStart] = useState(() => Math.random() * 360);
     const [duration] = useState(() => 8 + Math.random() * 4);
 
     useEffect(() => setWindowHeight(window.innerHeight), []);
 
+    // Variations for Autumn
+    const getLeafPath = (type: number, color: string, accent: string) => {
+        switch (type) {
+            case 0: // Maple (Front)
+                return (
+                    <svg width="30" height="30" viewBox="0 0 30 30" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.2))' }}>
+                        <path d="M15,2 L17,10 L20,8 L18,14 L25,12 L19,18 L26,22 L18,20 L20,27 L15,22 L10,27 L12,20 L4,22 L11,18 L5,12 L12,14 L10,8 L13,10 L15,2 Z" fill={color} stroke={accent} strokeWidth="0.5" />
+                        <line x1="15" y1="8" x2="15" y2="22" stroke={accent} strokeWidth="0.5" opacity="0.6" />
+                    </svg>
+                );
+            case 1: // Oak (lobed)
+                return (
+                    <svg width="25" height="35" viewBox="0 0 25 35" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.2))' }}>
+                        <path d="M12,2 Q16,5 17,8 Q22,8 23,12 Q19,15 17,18 Q20,22 18,26 Q15,28 12,32 Q9,28 6,26 Q4,22 7,18 Q5,15 1,12 Q2,8 7,8 Q8,5 12,2 Z" fill={color} stroke={accent} strokeWidth="0.5" />
+                        <line x1="12" y1="2" x2="12" y2="32" stroke={accent} strokeWidth="0.5" opacity="0.6" />
+                    </svg>
+                );
+            case 2: // Side View (Curled)
+                return (
+                    <svg width="25" height="25" viewBox="0 0 25 25" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.2))' }}>
+                        <path d="M2,20 Q12,10 22,5 Q18,15 12,22 Q5,22 2,20 Z" fill={color} stroke={accent} strokeWidth="0.5" />
+                        <path d="M2,20 Q8,18 12,22" fill="none" stroke={accent} strokeWidth="0.5" opacity="0.8" />
+                    </svg>
+                );
+            case 3: // Traditional / Stylized Pattern
+                return (
+                    <svg width="30" height="30" viewBox="0 0 30 30" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.2))' }}>
+                        <path d="M15,0 C25,10 25,20 15,30 C5,20 5,10 15,0 Z" fill={color} stroke={accent} strokeWidth="1" />
+                        {/* Intricate Veins */}
+                        <path d="M15,0 L15,30 M15,5 L20,10 M15,10 L22,15 M15,15 L20,20 M15,5 L10,10 M15,10 L8,15 M15,15 L10,20" stroke={accent} strokeWidth="0.5" opacity="0.7" fill="none" />
+                    </svg>
+                );
+            default: return null;
+        }
+    };
+
+    const colors = [
+        { fill: '#D2691E', accent: '#8B4513' },
+        { fill: '#CD5C5C', accent: '#8B0000' },
+        { fill: '#DAA520', accent: '#B8860B' },
+        { fill: '#A0522D', accent: '#5C3317' }
+    ];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+
     return (
         <motion.div
-            className="absolute text-xl"
-            style={{ left: `${x}%`, top: -20 }}
-            animate={{ y: [0, windowHeight + 50], rotate: [0, 360], x: [0, Math.sin(delay * 2) * 50, 0] }}
+            className="absolute pointer-events-none"
+            style={{ left: `${x}%`, top: -40 }}
+            animate={{
+                y: [0, windowHeight + 60],
+                rotate: [rotationStart, rotationStart + 360],
+                x: [0, Math.sin(delay * 3) * 60, 0] // Varied sway
+            }}
             transition={{ duration, delay, repeat: Infinity, ease: "linear" }}
         >
-            {leaf}
+            {getLeafPath(leafType, color.fill, color.accent)}
         </motion.div>
     );
 }
+
 
 function RainDrop({ delay }: { delay: number }) {
     const [windowHeight, setWindowHeight] = useState(800);
@@ -391,8 +441,8 @@ function DarkCloud({ delay, x, scale, isNight }: { delay: number; x: number; sca
                 left: `${x}%`,
                 top: `${y}%`,
                 filter: isNight
-                    ? 'drop-shadow(0 4px 20px rgba(0,0,0,0.9)) blur(1px)' // Darker, blurred shadow for night
-                    : 'drop-shadow(0 8px 15px rgba(0,0,0,0.4)) blur(0.5px)' // Soft shadow for day
+                    ? 'blur(8px) drop-shadow(0 4px 20px rgba(0,0,0,0.9))' // Heavy blur for night outline
+                    : 'blur(5px) drop-shadow(0 8px 15px rgba(0,0,0,0.4))' // Soft blur for day
             }}
             initial={{ x: -150 }}
             animate={{ x: [0, 50, 0] }} // Gentle drift
@@ -400,10 +450,10 @@ function DarkCloud({ delay, x, scale, isNight }: { delay: number; x: number; sca
         >
             {/* Complex Multi-Layered Cloud Shape for Realism */}
             <svg width={150 * scale} height={80 * scale} viewBox="0 0 150 80" fill="currentColor" className="overflow-visible">
-                {/* Base Layer */}
+                {/* Base Layer - Heavily blurred via container, but add internal opacity */}
                 <path d="M20 50 Q30 30 50 35 Q60 15 90 25 Q110 5 130 30 Q145 35 140 55 Q135 75 100 70 Q80 75 50 65 Q20 70 10 55 Q0 50 20 50Z" opacity="0.9" />
-                {/* Top Fluff */}
-                <path d="M40 35 Q55 10 80 25 Q100 15 120 35" fill="none" stroke="currentColor" strokeWidth="20" strokeLinecap="round" opacity="0.6" style={{ filter: 'blur(4px)' }} />
+                {/* Top Fluff - Extra blur */}
+                <path d="M40 35 Q55 10 80 25 Q100 15 120 35" fill="none" stroke="currentColor" strokeWidth="25" strokeLinecap="round" opacity="0.5" style={{ filter: 'blur(8px)' }} />
             </svg>
         </motion.div>
     );
@@ -448,33 +498,42 @@ function Lightning({ isNight }: { isNight: boolean }) {
 }
 
 
+
 function SpiderWeb({ isRight }: { isRight: boolean }) {
+    // Different variations for left and right webs to look unique
+    const scale = isRight ? 1.3 : 1.1;
+    const rotate = isRight ? 12 : -8;
+    const zoom = isRight ? 1.4 : 1.2;
+
     return (
         <motion.div
-            className="absolute top-0 text-slate-200/40 pointer-events-none"
+            className="absolute top-0 pointer-events-none"
             style={{
-                right: isRight ? 0 : 'auto',
-                left: isRight ? 'auto' : 0,
+                right: isRight ? -60 : 'auto',
+                left: isRight ? 'auto' : -60,
+                top: isRight ? -95 : -90,
+                width: '250px',
+                height: '250px',
                 transformOrigin: isRight ? 'top right' : 'top left',
-                zIndex: 10
+                zIndex: 10,
             }}
             initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 0.4 }}
-            transition={{ duration: 1, ease: 'easeOut' }}
+            animate={{ scale: 1, opacity: 0.8 }}
+            transition={{ duration: 1.5, ease: 'easeOut' }}
         >
-            <svg width="300" height="300" viewBox="0 0 200 200" style={{ transform: isRight ? 'scaleX(-1)' : 'none' }}>
-                <path d="M0 0 L200 0 L0 200 Z" fill="none" />
-                <path d="M0 0 L180 20" stroke="currentColor" strokeWidth="1" />
-                <path d="M0 0 L150 50" stroke="currentColor" strokeWidth="1" />
-                <path d="M0 0 L100 100" stroke="currentColor" strokeWidth="1" />
-                <path d="M0 0 L50 150" stroke="currentColor" strokeWidth="1" />
-                <path d="M0 0 L20 180" stroke="currentColor" strokeWidth="1" />
-                {/* Cross treads */}
-                <path d="M30 10 Q50 30 10 30" stroke="currentColor" strokeWidth="0.5" fill="none" />
-                <path d="M60 20 Q100 60 20 60" stroke="currentColor" strokeWidth="0.5" fill="none" />
-                <path d="M90 30 Q150 90 30 90" stroke="currentColor" strokeWidth="0.5" fill="none" />
-                <path d="M120 40 Q200 120 40 120" stroke="currentColor" strokeWidth="0.5" fill="none" />
-            </svg>
+            <img
+                src="/spider-web.png"
+                alt="Spider Web"
+                className="opacity-90 dark:invert absolute"
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    objectPosition: isRight ? 'top right' : 'top left',
+                    transform: `scale(${zoom}) rotate(${rotate}deg) ${isRight ? 'scaleX(-1)' : ''}`,
+                    filter: 'drop-shadow(0 0 3px rgba(255,255,255,0.2)) contrast(1.1)',
+                }}
+            />
         </motion.div>
     );
 }
@@ -482,24 +541,62 @@ function SpiderWeb({ isRight }: { isRight: boolean }) {
 function GreenLeaf({ delay }: { delay: number }) {
     const [windowHeight, setWindowHeight] = useState(800);
     const [x] = useState(() => Math.random() * 100);
-    const leaves = ["🌿", "🍃", "🌱"];
-    const [leaf] = useState(() => leaves[Math.floor(Math.random() * leaves.length)]);
+    const [leafType] = useState(() => Math.floor(Math.random() * 3));
     const [duration] = useState(() => 10 + Math.random() * 5);
 
     useEffect(() => setWindowHeight(window.innerHeight), []);
 
+    // Variations for Summer
+    const getGreenLeafPath = (type: number, color: string, accent: string) => {
+        switch (type) {
+            case 0: // Standard Oval
+                return (
+                    <svg width="28" height="32" viewBox="0 0 28 32" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.15))' }}>
+                        <path d="M14,2 Q20,8 22,16 Q20,24 14,30 Q8,24 6,16 Q8,8 14,2 Z" fill={color} stroke={accent} strokeWidth="0.5" />
+                        <line x1="14" y1="4" x2="14" y2="28" stroke={accent} strokeWidth="0.8" opacity="0.7" />
+                        <path d="M14,10 Q18,12 20,14 M14,10 Q10,12 8,14 M14,18 Q18,19 20,20 M14,18 Q10,19 8,20" stroke={accent} strokeWidth="0.4" opacity="0.5" fill="none" />
+                    </svg>
+                );
+            case 1: // Elongated / Willow-like
+                return (
+                    <svg width="20" height="40" viewBox="0 0 20 40" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.15))' }}>
+                        <path d="M10,0 Q18,10 18,20 Q15,35 10,40 Q5,35 2,20 Q2,10 10,0 Z" fill={color} stroke={accent} strokeWidth="0.5" />
+                        <line x1="10" y1="0" x2="10" y2="40" stroke={accent} strokeWidth="0.5" opacity="0.6" />
+                    </svg>
+                );
+            case 2: // Side View (Curved - Realistic)
+                return (
+                    <svg width="30" height="25" viewBox="0 0 30 25" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.15))' }}>
+                        {/* More organic curved shape */}
+                        <path d="M2,22 Q8,12 18,8 Q28,6 28,2 Q22,12 15,18 Q8,24 2,22 Z" fill={color} stroke={accent} strokeWidth="0.5" />
+                        {/* Central vein following the curve */}
+                        <path d="M2,22 Q12,14 28,2" stroke={accent} strokeWidth="0.6" fill="none" opacity="0.8" />
+                    </svg>
+                );
+            default: return null;
+        }
+    };
+
+    // Different green shades
+    const colors = [
+        { fill: '#228B22', accent: '#006400' },
+        { fill: '#32CD32', accent: '#228B22' },
+        { fill: '#2E8B57', accent: '#1C5F3A' }
+    ];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+
     return (
         <motion.div
-            className="absolute text-xl pointer-events-none"
-            style={{ left: `${x}%`, top: -20, filter: 'hue-rotate(30deg) brightness(1.2)' }}
+            className="absolute pointer-events-none"
+            style={{ left: `${x}%`, top: -40 }}
             animate={{
-                y: [0, windowHeight + 50],
+                y: [0, windowHeight + 60],
                 rotate: [0, 360],
-                x: [0, Math.sin(delay * 2) * 80, 0]
+                x: [0, Math.sin(delay * 2.5) * 70, 0]
             }}
             transition={{ duration, delay, repeat: Infinity, ease: "linear" }}
         >
-            {leaf}
+            {getGreenLeafPath(leafType, color.fill, color.accent)}
         </motion.div>
     );
 }
@@ -510,12 +607,12 @@ export function FestiveEffects() {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-         
+
         setMounted(true);
     }, []);
 
     useEffect(() => {
-         
+
         if (theme !== 'Diwali' && theme !== 'NewYear') { setCrackers([]); return; }
         const interval = setInterval(() => {
             setCrackers(prev => {

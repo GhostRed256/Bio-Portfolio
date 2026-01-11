@@ -1,0 +1,37 @@
+.hoverText {
+    display: inline-block;
+    cursor: pointer;
+    transition:
+        0.35s font-weight,
+        0.35s color,
+        0.35s transform;
+}
+
+.hoverText:hover {
+    font-weight: 900;
+    color: hsl(var(--primary));
+    text-shadow: 0 0 8px hsl(var(--primary) / 0.5);
+    transform: scale(1.1);
+}
+
+/* To the right */
+.hoverText:hover+.hoverText {
+    font-weight: 600;
+    color: hsl(var(--primary) / 0.7);
+    transform: scale(1.05);
+}
+
+.hoverText:hover+.hoverText+.hoverText {
+    font-weight: 400;
+}
+
+/* To the left */
+.hoverText:has(+ .hoverText:hover) {
+    font-weight: 600;
+    color: hsl(var(--primary) / 0.7);
+    transform: scale(1.05);
+}
+
+.hoverText:has(+ .hoverText + .hoverText:hover) {
+    font-weight: 400;
+}

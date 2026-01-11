@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { Instagram } from "lucide-react";
 import { artPieces, instagramProfileUrl, ArtPiece } from "@/data/art";
@@ -48,26 +48,93 @@ export function ArtGallery() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                     {artPieces.map((piece, index) => (
-                        <motion.div
-                            key={piece.id}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true, margin: "-100px" }}
-                            transition={{
-                                delay: index * 0.05,
-                                duration: 0.6,
-                                ease: [0.23, 1, 0.32, 1]
-                            }}
-                            className="group"
-                        >
+                        <TiltCard key={piece.id} index={index}>
                             <div className="relative aspect-square overflow-hidden rounded-[2.5rem] bg-white/40 dark:bg-white/5 backdrop-blur-3xl border border-white/30 dark:border-white/10 shadow-2xl p-3 transition-all duration-500 group-hover:shadow-primary/20 group-hover:rounded-[2rem]">
                                 <InstagramCard piece={piece} index={index} total={artPieces.length} />
                             </div>
-                        </motion.div>
+                        </TiltCard>
                     ))}
                 </div>
             </div>
         </section>
+    );
+}
+
+function TiltCard({ children, index }: { children: React.ReactNode; index: number }) {
+    const [rotateX, setRotateX] = useState(0);
+    const [rotateY, setRotateY] = useState(0);
+    const [shineX, setShineX] = useState(50);
+    const [shineY, setShineY] = useState(50);
+    const [isHovering, setIsHovering] = useState(false);
+    const cardRef = useRef<HTMLDivElement>(null);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!cardRef.current) return;
+
+        const rect = cardRef.current.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateXValue = ((y - centerY) / centerY) * -15;
+        const rotateYValue = ((x - centerX) / centerX) * 15;
+
+        setRotateX(rotateXValue);
+        setRotateY(rotateYValue);
+
+        // Calculate shine position as percentage
+        const shineXValue = (x / rect.width) * 100;
+        const shineYValue = (y / rect.height) * 100;
+
+        setShineX(shineXValue);
+        setShineY(shineYValue);
+    };
+
+    const handleMouseLeave = () => {
+        setRotateX(0);
+        setRotateY(0);
+        setIsHovering(false);
+    };
+
+    const handleMouseEnter = () => {
+        setIsHovering(true);
+    };
+
+    return (
+        <motion.div
+            ref={cardRef}
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{
+                delay: index * 0.05,
+                duration: 0.6,
+                ease: [0.23, 1, 0.32, 1]
+            }}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            onMouseEnter={handleMouseEnter}
+            style={{
+                transformStyle: 'preserve-3d',
+                transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) ${isHovering ? 'scale(1.05)' : 'scale(1)'}`,
+                transition: isHovering ? 'transform 0.1s ease-out' : 'transform 0.5s ease-out',
+            }}
+            className="group relative"
+        >
+            {children}
+            {/* Shine overlay */}
+            {isHovering && (
+                <div
+                    className="absolute inset-0 rounded-[2.5rem] pointer-events-none overflow-hidden z-10"
+                    style={{
+                        background: `radial-gradient(circle 300px at ${shineX}% ${shineY}%, rgba(255,255,255,0.12), transparent 80%)`,
+                        filter: 'blur(20px)',
+                    }}
+                />
+            )}
+        </motion.div>
     );
 }
 

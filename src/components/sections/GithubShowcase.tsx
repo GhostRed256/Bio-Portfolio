@@ -28,13 +28,24 @@ export function GithubShowcase() {
                         className="h-full"
                     >
                         <BrowserWindow url={project.repoUrl} className="h-full min-h-[250px] bg-background">
-                            <div className="p-6 flex flex-col h-full">
+                            <div className="p-6 flex flex-col h-full" style={{ transformStyle: 'preserve-3d' }}>
                                 <div className="flex justify-between items-start mb-4">
-                                    <div className="flex items-center gap-2">
-                                        <Github className="w-5 h-5" />
-                                        <h3 className="font-semibold text-lg">{project.name}</h3>
+                                    <div className="flex items-center gap-2 group-hover-3d">
+                                        <Github
+                                            className="w-5 h-5 transition-transform duration-300"
+                                            style={{ transform: 'translateZ(30px)' }}
+                                        />
+                                        <h3
+                                            className="font-semibold text-lg transition-transform duration-300"
+                                            style={{ transform: 'translateZ(40px)' }}
+                                        >
+                                            {project.name}
+                                        </h3>
                                     </div>
-                                    <div className="flex items-center text-xs font-medium text-muted-foreground border border-border px-2 py-1 rounded-full">
+                                    <div
+                                        className="flex items-center text-xs font-medium text-muted-foreground border border-border px-2 py-1 rounded-full transition-transform duration-300"
+                                        style={{ transform: 'translateZ(35px)' }}
+                                    >
                                         <Star className="w-3 h-3 mr-1 fill-yellow-500 stroke-yellow-500" />
                                         {project.stars}
                                     </div>
