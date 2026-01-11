@@ -271,14 +271,14 @@ function Firefly({ delay }: { delay: number }) {
     // Actually, animate props are re-evaluated on render? No, only if props change.
     // But Math.random() in JSX props runs every render.
     // I'll memoize the animation variants.
-    const animate = useMemo(() => ({
+    const [animationProps] = useState(() => ({
         x: [0, (Math.random() - 0.5) * 100, 0],
         y: [0, (Math.random() - 0.5) * 100, 0],
         opacity: [0.2, 1, 0.2],
         scale: [0.8, 1.2, 0.8]
-    }), []);
+    }));
 
-    const duration = useMemo(() => 10 + Math.random() * 10, []);
+    const [duration] = useState(() => 10 + Math.random() * 10);
 
     return (
         <motion.div
@@ -288,7 +288,7 @@ function Firefly({ delay }: { delay: number }) {
                 top: `${position.y}%`,
                 boxShadow: "0 0 8px #fef08a, 0 0 16px #fef08a"
             }}
-            animate={animate}
+            animate={animationProps}
             transition={{
                 duration,
                 repeat: Infinity,
@@ -379,18 +379,143 @@ function Ghost({ delay }: { delay: number }) {
     );
 }
 
+
+function DarkCloud({ delay, x, scale, isNight }: { delay: number; x: number; scale: number; isNight: boolean }) {
+    const [duration] = useState(() => 40 + Math.random() * 20); // Slower, more realistic drift
+    const [y] = useState(() => 2 + Math.random() * 15);
+
+    return (
+        <motion.div
+            className={`absolute ${isNight ? 'text-slate-800' : 'text-slate-500'} opacity-90`}
+            style={{
+                left: `${x}%`,
+                top: `${y}%`,
+                filter: isNight
+                    ? 'drop-shadow(0 4px 20px rgba(0,0,0,0.9)) blur(1px)' // Darker, blurred shadow for night
+                    : 'drop-shadow(0 8px 15px rgba(0,0,0,0.4)) blur(0.5px)' // Soft shadow for day
+            }}
+            initial={{ x: -150 }}
+            animate={{ x: [0, 50, 0] }} // Gentle drift
+            transition={{ duration, delay, repeat: Infinity, ease: "easeInOut" }}
+        >
+            {/* Complex Multi-Layered Cloud Shape for Realism */}
+            <svg width={150 * scale} height={80 * scale} viewBox="0 0 150 80" fill="currentColor" className="overflow-visible">
+                {/* Base Layer */}
+                <path d="M20 50 Q30 30 50 35 Q60 15 90 25 Q110 5 130 30 Q145 35 140 55 Q135 75 100 70 Q80 75 50 65 Q20 70 10 55 Q0 50 20 50Z" opacity="0.9" />
+                {/* Top Fluff */}
+                <path d="M40 35 Q55 10 80 25 Q100 15 120 35" fill="none" stroke="currentColor" strokeWidth="20" strokeLinecap="round" opacity="0.6" style={{ filter: 'blur(4px)' }} />
+            </svg>
+        </motion.div>
+    );
+}
+
+function Lightning({ isNight }: { isNight: boolean }) {
+    const [flash, setFlash] = useState(false);
+    const [trigger, setTrigger] = useState(0);
+    const [boltLeft, setBoltLeft] = useState(() => 20 + Math.random() * 60);
+
+    // Random lightning triggers
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setFlash(true);
+            setBoltLeft(20 + Math.random() * 60);
+            setTimeout(() => setFlash(false), 100 + Math.random() * 150); // Faster, sharper flash
+            setTrigger(prev => prev + 1);
+        }, 3000 + Math.random() * 7000);
+
+        return () => clearTimeout(timeout);
+    }, [trigger]);
+
+    return (
+        <div className={`fixed inset-0 pointer-events-none transition-opacity duration-75 ${flash ? 'opacity-100' : 'opacity-0'} ${isNight ? 'z-[-5]' : 'z-[5]'}`}>
+            {/* Ultra Bright Flash Overlay */}
+            <div className={`absolute inset-0 ${isNight ? 'bg-slate-200/20' : 'bg-white/60'} mix-blend-hard-light`} />
+
+            {/* Dramatic Bolt */}
+            {flash && (
+                <div
+                    className="absolute top-0 w-[4px] h-[70vh] bg-blue-50 shadow-[0_0_50px_#fff,0_0_100px_#60a5fa] z-10"
+                    style={{ left: `${boltLeft}%`, filter: 'blur(0.5px)', opacity: 1 }}
+                >
+                    <svg className="absolute top-0 -left-20 w-40 h-full" viewBox="0 0 100 400" preserveAspectRatio="none">
+                        <path d="M50 0 L65 120 L35 120 L55 250 L20 250 L60 400" fill="none" stroke="white" strokeWidth="4"
+                            style={{ filter: 'drop-shadow(0 0 20px #bfdbfe) drop-shadow(0 0 40px #3b82f6)' }} />
+                    </svg>
+                </div>
+            )}
+        </div>
+    );
+}
+
+
+function SpiderWeb({ isRight }: { isRight: boolean }) {
+    return (
+        <motion.div
+            className="absolute top-0 text-slate-200/40 pointer-events-none"
+            style={{
+                right: isRight ? 0 : 'auto',
+                left: isRight ? 'auto' : 0,
+                transformOrigin: isRight ? 'top right' : 'top left',
+                zIndex: 10
+            }}
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 0.4 }}
+            transition={{ duration: 1, ease: 'easeOut' }}
+        >
+            <svg width="300" height="300" viewBox="0 0 200 200" style={{ transform: isRight ? 'scaleX(-1)' : 'none' }}>
+                <path d="M0 0 L200 0 L0 200 Z" fill="none" />
+                <path d="M0 0 L180 20" stroke="currentColor" strokeWidth="1" />
+                <path d="M0 0 L150 50" stroke="currentColor" strokeWidth="1" />
+                <path d="M0 0 L100 100" stroke="currentColor" strokeWidth="1" />
+                <path d="M0 0 L50 150" stroke="currentColor" strokeWidth="1" />
+                <path d="M0 0 L20 180" stroke="currentColor" strokeWidth="1" />
+                {/* Cross treads */}
+                <path d="M30 10 Q50 30 10 30" stroke="currentColor" strokeWidth="0.5" fill="none" />
+                <path d="M60 20 Q100 60 20 60" stroke="currentColor" strokeWidth="0.5" fill="none" />
+                <path d="M90 30 Q150 90 30 90" stroke="currentColor" strokeWidth="0.5" fill="none" />
+                <path d="M120 40 Q200 120 40 120" stroke="currentColor" strokeWidth="0.5" fill="none" />
+            </svg>
+        </motion.div>
+    );
+}
+
+function GreenLeaf({ delay }: { delay: number }) {
+    const [windowHeight, setWindowHeight] = useState(800);
+    const [x] = useState(() => Math.random() * 100);
+    const leaves = ["🌿", "🍃", "🌱"];
+    const [leaf] = useState(() => leaves[Math.floor(Math.random() * leaves.length)]);
+    const [duration] = useState(() => 10 + Math.random() * 5);
+
+    useEffect(() => setWindowHeight(window.innerHeight), []);
+
+    return (
+        <motion.div
+            className="absolute text-xl pointer-events-none"
+            style={{ left: `${x}%`, top: -20, filter: 'hue-rotate(30deg) brightness(1.2)' }}
+            animate={{
+                y: [0, windowHeight + 50],
+                rotate: [0, 360],
+                x: [0, Math.sin(delay * 2) * 80, 0]
+            }}
+            transition={{ duration, delay, repeat: Infinity, ease: "linear" }}
+        >
+            {leaf}
+        </motion.div>
+    );
+}
+
 export function FestiveEffects() {
     const { theme, isDay } = useSeasonalTheme();
     const [crackers, setCrackers] = useState<number[]>([]);
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+         
         setMounted(true);
     }, []);
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+         
         if (theme !== 'Diwali' && theme !== 'NewYear') { setCrackers([]); return; }
         const interval = setInterval(() => {
             setCrackers(prev => {
@@ -402,6 +527,13 @@ export function FestiveEffects() {
     }, [theme]);
 
     const lights = useMemo(() => ["#FF0000", "#00FF00", "#FFD700", "#FF0000", "#00FF00", "#FFD700"], []);
+    // Lazy init for clouds to avoid impure random in render
+    const [clouds] = useState(() => Array.from({ length: 8 }).map((_, i) => ({
+        id: i,
+        delay: i * 2,
+        x: Math.random() * 80,
+        scale: 1 + Math.random() * 1.5
+    })));
 
     if (!mounted) return null;
 
@@ -437,10 +569,44 @@ export function FestiveEffects() {
             {(theme === 'IndependenceDay' || theme === 'RepublicDay') && Array.from({ length: 25 }).map((_, i) => <Petal key={i} delay={i * 0.5} />)}
             {theme === 'Spring' && Array.from({ length: 15 }).map((_, i) => <Flower key={i} delay={i * 0.5} />)}
             {theme === 'Autumn' && Array.from({ length: 12 }).map((_, i) => <AutumnLeaf key={i} delay={i * 0.8} />)}
-            {theme === 'Monsoon' && Array.from({ length: 40 }).map((_, i) => <RainDrop key={i} delay={i * 0.1} />)}
-            {theme === 'Halloween' && Array.from({ length: 8 }).map((_, i) => <Ghost key={i} delay={i * 0.5} />)}
+
+            {theme === 'Monsoon' && (
+                <>
+                    {/* Background Lightning (Night) or Overlay (Day) */}
+                    <Lightning isNight={!isDay} />
+
+                    {/* Dark Clouds */}
+                    {clouds.map((cloud) => (
+                        <DarkCloud
+                            key={cloud.id}
+                            delay={cloud.delay}
+                            x={cloud.x}
+                            scale={cloud.scale}
+                            isNight={!isDay}
+                        />
+                    ))}
+
+                    {/* Rain overlays everything */}
+                    {Array.from({ length: 60 }).map((_, i) => <RainDrop key={i} delay={i * 0.1} />)}
+                </>
+            )}
+
+            {theme === 'Halloween' && (
+                <>
+                    <SpiderWeb isRight={false} />
+                    <SpiderWeb isRight={true} />
+                    {Array.from({ length: 8 }).map((_, i) => <Ghost key={i} delay={i * 0.5} />)}
+                </>
+            )}
             {theme === 'Summer' && (
-                isDay ? <RealisticSun /> : Array.from({ length: 30 }).map((_, i) => <Firefly key={i} delay={i * 0.2} />)
+                isDay ? (
+                    <>
+                        <RealisticSun />
+                        {Array.from({ length: 15 }).map((_, i) => <GreenLeaf key={i} delay={i * 1.5} />)}
+                    </>
+                ) : (
+                    Array.from({ length: 30 }).map((_, i) => <Firefly key={i} delay={i * 0.2} />)
+                )
             )}
         </div>
     );

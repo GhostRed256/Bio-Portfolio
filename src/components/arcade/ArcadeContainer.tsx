@@ -2,9 +2,10 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { X, Play, Pause, RotateCcw, ChevronLeft, ChevronRight, Maximize2, Minimize2 } from "lucide-react";
 import { useArcade } from "@/hooks/arcade/useArcade";
+import { useTouchGesture } from "@/hooks/useTouchGesture";
 import { useTetris } from "@/hooks/arcade/useTetris";
 import { useSnake } from "@/hooks/arcade/useSnake";
 import { useSpaceImpact } from "@/hooks/arcade/useSpaceImpact";
@@ -243,6 +244,30 @@ export function ArcadeContainer({ isOpen, onClose }: ArcadeContainerProps) {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [isOpen, game]);
 
+    // Touch Gesture Support for Mobile
+    const gameRef = useRef<HTMLDivElement>(null);
+    const { handleTouchStart, handleTouchEnd } = useTouchGesture({
+        onSwipeUp: () => game.onDirection('UP'),
+        onSwipeDown: () => game.onDirection('DOWN'),
+        onSwipeLeft: () => game.onDirection('LEFT'),
+        onSwipeRight: () => game.onDirection('RIGHT'),
+        onTap: () => game.onDirection('FIRE'),
+        threshold: 30
+    });
+
+    useEffect(() => {
+        const gameEl = gameRef.current;
+        if (!gameEl || !isOpen) return;
+
+        gameEl.addEventListener('touchstart', handleTouchStart);
+        gameEl.addEventListener('touchend', handleTouchEnd);
+
+        return () => {
+            gameEl.removeEventListener('touchstart', handleTouchStart);
+            gameEl.removeEventListener('touchend', handleTouchEnd);
+        };
+    }, [isOpen, handleTouchStart, handleTouchEnd]);
+
     // Prevent body scroll when open
     useEffect(() => {
         if (isOpen) {
@@ -348,7 +373,7 @@ export function ArcadeContainer({ isOpen, onClose }: ArcadeContainerProps) {
                             <div className="flex-1 flex flex-col items-center justify-center relative p-4 gap-4">
 
                                 {/* Game Board */}
-                                <div className="relative z-10">
+                                <div ref={gameRef} className="relative z-10">
 
                                     {/* Main Screen */}
                                     <div className="p-1 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border-4 border-slate-700 shadow-2xl">

@@ -37,7 +37,7 @@ export function FloatingBalloons() {
         // Check if today is September 26
         const today = new Date();
         const isSept26 = today.getMonth() === 8 && today.getDate() === 26; // Month is 0-indexed
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+         
         setIsSpecialDay(isSept26);
 
         if (!isSept26) return;
