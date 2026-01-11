@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Gamepad2 } from "lucide-react";
-import { TetrisGame } from "./TetrisGame";
+import { ArcadeContainer } from "../arcade/ArcadeContainer";
 
 const REQUIRED_CLICKS = 9;
 const RESET_TIMEOUT = 3000;
@@ -41,7 +41,7 @@ export function EasterEggTrigger() {
             <AnimatePresence>
                 {!isGameOpen && (
                     <motion.button
-                        layoutId="tetris-game"
+                        layoutId="arcade-system"
                         onClick={handleClick}
                         className="group flex items-center gap-1.5 px-2 py-1 rounded-full text-muted-foreground/30 hover:text-primary/60 transition-colors cursor-default hover:cursor-pointer"
                         whileHover={{ scale: 1.05 }}
@@ -68,7 +68,7 @@ export function EasterEggTrigger() {
                 )}
             </AnimatePresence>
 
-            <TetrisGame
+            <ArcadeContainer
                 isOpen={isGameOpen}
                 onClose={() => setIsGameOpen(false)}
             />

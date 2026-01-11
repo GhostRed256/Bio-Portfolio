@@ -150,7 +150,7 @@ function calculateScore(linesCleared: number, level: number): number {
     return linePoints[linesCleared] * (level + 1);
 }
 
-export function useTetris() {
+export function useTetris(isActive: boolean = false) {
     const [gameState, setGameState] = useState<GameState>({
         board: createEmptyBoard(),
         currentPiece: null,
@@ -161,7 +161,7 @@ export function useTetris() {
         isGameOver: false,
         isPaused: false
     });
-
+    const [isStarted, setIsStarted] = useState(false);
     const gameLoopRef = useRef<NodeJS.Timeout | null>(null);
 
     const startGame = useCallback(() => {
@@ -176,6 +176,7 @@ export function useTetris() {
             isGameOver: false,
             isPaused: false
         });
+        setIsStarted(true);
     }, []);
 
     const togglePause = useCallback(() => {
@@ -206,7 +207,7 @@ export function useTetris() {
 
     const rotate = useCallback(() => {
         setGameState(prev => {
-            if (!prev.currentPiece || prev.isGameOver || prev.isPaused) return prev;
+            if (!prev.currentPiece || prev.isGameOver || prev.isPaused || !isActive) return prev;
             const rotated = rotatePiece(prev.currentPiece);
 
             // Wall kick - try to fit rotated piece
@@ -220,11 +221,11 @@ export function useTetris() {
             }
             return prev;
         });
-    }, []);
+    }, [isActive]);
 
     const hardDrop = useCallback(() => {
         setGameState(prev => {
-            if (!prev.currentPiece || prev.isGameOver || prev.isPaused) return prev;
+            if (!prev.currentPiece || prev.isGameOver || prev.isPaused || !isActive) return prev;
 
             let dropY = 0;
             while (!checkCollision(prev.board, prev.currentPiece, 0, dropY + 1)) {
@@ -253,11 +254,11 @@ export function useTetris() {
                 isGameOver
             };
         });
-    }, []);
+    }, [isActive]);
 
     const moveDown = useCallback(() => {
         setGameState(prev => {
-            if (!prev.currentPiece || prev.isGameOver || prev.isPaused) return prev;
+            if (!prev.currentPiece || prev.isGameOver || prev.isPaused || !isActive) return prev;
 
             if (checkCollision(prev.board, prev.currentPiece, 0, 1)) {
                 // Merge piece and spawn new one
@@ -288,11 +289,11 @@ export function useTetris() {
                 currentPiece: { ...prev.currentPiece, y: prev.currentPiece.y + 1 }
             };
         });
-    }, []);
+    }, [isActive]);
 
     // Game loop
     useEffect(() => {
-        if (gameState.isGameOver || gameState.isPaused || !gameState.currentPiece) {
+        if (!isActive || gameState.isGameOver || gameState.isPaused || !gameState.currentPiece) {
             if (gameLoopRef.current) {
                 clearInterval(gameLoopRef.current);
                 gameLoopRef.current = null;
@@ -309,10 +310,12 @@ export function useTetris() {
                 clearInterval(gameLoopRef.current);
             }
         };
-    }, [gameState.isGameOver, gameState.isPaused, gameState.currentPiece, gameState.level, moveDown]);
+    }, [isActive, gameState.isGameOver, gameState.isPaused, gameState.currentPiece, gameState.level, moveDown]);
 
     // Keyboard controls
     useEffect(() => {
+        if (!isActive) return;
+
         const handleKeyDown = (e: KeyboardEvent) => {
             if (gameState.isGameOver && e.key !== 'Enter') return;
 
@@ -353,7 +356,7 @@ export function useTetris() {
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [gameState.isGameOver, gameState.currentPiece, moveLeft, moveRight, rotate, moveDown, hardDrop, togglePause, startGame]);
+    }, [isActive, gameState.isGameOver, gameState.currentPiece, moveLeft, moveRight, rotate, moveDown, hardDrop, togglePause, startGame]);
 
     // Create display board (with current piece)
     const displayBoard = gameState.currentPiece
@@ -368,6 +371,7 @@ export function useTetris() {
         level: gameState.level,
         isGameOver: gameState.isGameOver,
         isPaused: gameState.isPaused,
+        isStarted,
         startGame,
         togglePause,
         moveLeft,

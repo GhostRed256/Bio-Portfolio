@@ -9,6 +9,8 @@ interface Balloon {
     delay: number;
     color: string;
     scale: number;
+    sway: number;
+    duration: number;
 }
 
 const pastelColors = [
@@ -35,6 +37,7 @@ export function FloatingBalloons() {
         // Check if today is September 26
         const today = new Date();
         const isSept26 = today.getMonth() === 8 && today.getDate() === 26; // Month is 0-indexed
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         setIsSpecialDay(isSept26);
 
         if (!isSept26) return;
@@ -46,6 +49,8 @@ export function FloatingBalloons() {
             delay: Math.random() * 5,
             color: pastelColors[Math.floor(Math.random() * pastelColors.length)],
             scale: 0.5 + Math.random() * 0.5, // Scale between 0.5 and 1
+            sway: Math.random() * 50 - 25,
+            duration: 15 + Math.random() * 10
         }));
         setBalloons(newBalloons);
     }, []);
@@ -66,10 +71,10 @@ export function FloatingBalloons() {
                         animate={{
                             top: "-20vh",
                             opacity: [0, 0.8, 0.8, 0],
-                            x: [0, Math.random() * 50 - 25, 0] // Gentle sway
+                            x: [0, balloon.sway, 0] // Gentle sway
                         }}
                         transition={{
-                            duration: 15 + Math.random() * 10,
+                            duration: balloon.duration,
                             repeat: Infinity,
                             delay: balloon.delay,
                             ease: "linear",

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 // import { Ratelimit } from "@upstash/ratelimit";
 // import { Redis } from "@upstash/redis";
 
@@ -18,7 +18,7 @@ import { NextRequest, NextResponse } from "next/server";
 //     })
 //   : null;
 
-export async function proxy(request: NextRequest) {
+export async function middleware() {
     const response = NextResponse.next();
 
     // Security Headers

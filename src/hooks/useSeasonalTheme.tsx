@@ -298,13 +298,9 @@ export function SeasonalThemeProvider({ children }: { children: React.ReactNode 
     const [isManualOverride, setIsManualOverride] = useState(false);
 
     // Auto-update theme based on date (if not manually overridden)
-    useEffect(() => {
-        if (!isManualOverride) {
-            const autoTheme = getAutoTheme(new Date());
-            setThemeState(autoTheme);
-            setIsDay(getIsDay());
-        }
-    }, [isManualOverride]);
+    // Auto-update theme based on date is handled by initial state and resetToAuto.
+    // Periodic updates would require a timer, but for now we rely on mount/reset.
+
 
     // Apply theme to document
     useEffect(() => {

@@ -2,13 +2,12 @@
 
 import { useSeasonalTheme } from "@/hooks/useSeasonalTheme";
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 
 export function SeasonalGreeting() {
     const { theme } = useSeasonalTheme();
-    const [greeting, setGreeting] = useState("");
 
-    useEffect(() => {
+    const greeting = useMemo(() => {
         const now = new Date();
         const month = now.getMonth(); // 0-11
         const day = now.getDate();
@@ -73,8 +72,7 @@ export function SeasonalGreeting() {
                     msg = "Welcome to my creative space! 👋";
             }
         }
-
-        setGreeting(msg);
+        return msg;
     }, [theme]);
 
     if (!greeting) return null;

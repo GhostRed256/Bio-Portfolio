@@ -2,10 +2,25 @@
 
 import { motion } from "framer-motion";
 import { useWeather, WeatherCondition } from "@/hooks/useWeather";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function WeatherEffects() {
     const { condition, isDay } = useWeather();
+
+    const [rainDrops] = useState(() => Array.from({ length: 50 }).map(() => ({
+        duration: 1 + Math.random(),
+        delay: Math.random() * 2,
+        left: Math.random() * 100
+    })));
+
+    const [snowFlakes] = useState(() => Array.from({ length: 40 }).map(() => ({
+        duration: 5 + Math.random() * 5,
+        delay: Math.random() * 5,
+        left: Math.random() * 100,
+        xOffset: Math.random() * 20 - 10
+    })));
+
+    const [lightningDelay] = useState(() => 5 + Math.random() * 10);
 
     // Dynamic Theme Variables based on Weather
     useEffect(() => {
@@ -94,20 +109,20 @@ export function WeatherEffects() {
             {/* RAIN ANIMATION */}
             {condition === 'Rainy' && (
                 <div className="absolute inset-0">
-                    {Array.from({ length: 50 }).map((_, i) => (
+                    {rainDrops.map((drop, i) => (
                         <motion.div
                             key={i}
                             initial={{ y: -20, opacity: 0 }}
                             animate={{ y: "100vh", opacity: 0.5 }}
                             transition={{
-                                duration: 1 + Math.random(),
+                                duration: drop.duration,
                                 repeat: Infinity,
                                 ease: "linear",
-                                delay: Math.random() * 2
+                                delay: drop.delay
                             }}
                             className="absolute bg-blue-400 w-[1px] h-6"
                             style={{
-                                left: `${Math.random() * 100}%`
+                                left: `${drop.left}%`
                             }}
                         />
                     ))}
@@ -115,7 +130,7 @@ export function WeatherEffects() {
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: [0, 0.3, 0] }}
-                        transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 5 + Math.random() * 10 }}
+                        transition={{ duration: 0.2, repeat: Infinity, repeatDelay: lightningDelay }}
                         className="absolute inset-0 bg-white mix-blend-overlay"
                     />
                 </div>
@@ -124,20 +139,20 @@ export function WeatherEffects() {
             {/* SNOW ANIMATION */}
             {condition === 'Snowy' && (
                 <div className="absolute inset-0">
-                    {Array.from({ length: 40 }).map((_, i) => (
+                    {snowFlakes.map((flake, i) => (
                         <motion.div
                             key={i}
                             initial={{ y: -20, opacity: 0 }}
-                            animate={{ y: "100vh", opacity: 0.8, x: Math.random() * 20 - 10 }}
+                            animate={{ y: "100vh", opacity: 0.8, x: flake.xOffset }}
                             transition={{
-                                duration: 5 + Math.random() * 5,
+                                duration: flake.duration,
                                 repeat: Infinity,
                                 ease: "linear",
-                                delay: Math.random() * 5
+                                delay: flake.delay
                             }}
                             className="absolute bg-sky-100 w-2 h-2 rounded-full blur-[1px] shadow-[0_0_4px_theme(colors.sky.300)]"
                             style={{
-                                left: `${Math.random() * 100}%`
+                                left: `${flake.left}%`
                             }}
                         />
                     ))}

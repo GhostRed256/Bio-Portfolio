@@ -59,8 +59,8 @@ export function useWeather() {
 
         // Default: Dibrugarh, Assam
         // Latitude: 27.4728, Longitude: 94.9120
-        let lat = 27.4728;
-        let lon = 94.9120;
+        const lat = 27.4728;
+        const lon = 94.9120;
 
         // Try getting user location
         if ("geolocation" in navigator) {
