@@ -42,6 +42,15 @@ export const projects: Project[] = [
         color: "#A97BFF"
     },
     {
+        name: "StayNJoy Homestay",
+        description: "A premium gold-luxury themed booking homestay web application allowing guests to reserve cozy rooms and suites, complete with a comprehensive modern admin and staff portal.",
+        repoUrl: "https://github.com/GhostRed256/HotelLuxe",
+        demoUrl: "https://stay-n-joy-wine.vercel.app",
+        language: "TypeScript",
+        stars: 0,
+        color: "#3178c6"
+    },
+    {
         name: "Semantic_Segmentation",
         description: "Brain tumor detection using semantic segmentation techniques, implemented in Jupyter Notebooks with Python.",
         repoUrl: "https://github.com/GhostRed256/Semantic_Segmentation",

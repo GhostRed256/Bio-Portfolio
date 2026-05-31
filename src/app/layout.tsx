@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ritesh Dey | Portfolio",
-  description: "Art, Photography & Code - A creative portfolio by Ritesh Dey",
+  title: "Ritesh Dey | Creative Developer & Artist",
+  description: "Welcome to my digital garden. A blend of creative coding, photography, and interactive web experiences built with modern tech.",
 };
 
 export default function RootLayout({

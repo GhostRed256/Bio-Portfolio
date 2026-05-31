@@ -8,7 +8,6 @@ import styles from "./hero.module.css";
 export function Hero() {
     return (
         <section id="home" className="relative h-[90vh] flex flex-col items-center justify-center text-center px-6 overflow-hidden">
-            {/* Background Gradient Spot */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
 
             <motion.div

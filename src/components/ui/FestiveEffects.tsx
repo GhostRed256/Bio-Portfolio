@@ -6,7 +6,6 @@ import { useSeasonalTheme } from "@/hooks/useSeasonalTheme";
 
 // Component Definitions
 function Cracker({ delay }: { delay: number }) {
-    // Rocket shoots to the top 20-40% of the screen
     const [position] = useState(() => ({ x: 10 + Math.random() * 80, startY: 75 + Math.random() * 15 }));
     const colors = ["#FFD700", "#FF4500", "#00FF7F", "#00BFFF", "#FF1493", "#9400D3", "#FFFFFF"];
     const particles = useMemo(() => Array.from({ length: 24 }).map((_, i) => ({
@@ -53,7 +52,7 @@ function Cracker({ delay }: { delay: number }) {
 function Petal({ delay }: { delay: number }) {
     const [windowHeight, setWindowHeight] = useState(800);
     const x = useMemo(() => Math.random() * 100, []);
-    const colors = ["#FF9933", "#FFFFFF", "#138808"]; // Tricolor petals
+    const colors = ["#FF9933", "#FFFFFF", "#138808"];
     const color = useMemo(() => colors[Math.floor(Math.random() * colors.length)], [colors]);
     const duration = useMemo(() => 6 + Math.random() * 4, []);
 
