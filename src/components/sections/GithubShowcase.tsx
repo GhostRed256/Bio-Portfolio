@@ -9,6 +9,7 @@ import { useState } from "react";
 function ProjectCard({ project, index }: { project: Project; index: number }) {
     const [iframeLoaded, setIframeLoaded] = useState(false);
     const hasDemoUrl = Boolean(project.demoUrl);
+    const previewImg = project.previewImg;
 
     return (
         <motion.div
@@ -21,46 +22,52 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         >
             <BrowserWindow url={project.demoUrl || project.repoUrl} className="h-full min-h-[360px] bg-background">
                 <div className="flex flex-col h-full relative overflow-hidden" style={{ transformStyle: 'preserve-3d' }}>
-                    {/* Live Website Preview Background (for projects with demoUrl) */}
-                    {hasDemoUrl && (
+                    {/* Live Website Preview / Image Background */}
+                    {(hasDemoUrl || previewImg) && (
                         <div className="absolute inset-0 bottom-[52px] z-0 overflow-hidden bg-muted/30">
-                            {/* Loading State Skeleton */}
-                            {!iframeLoaded && (
-                                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-muted/40 backdrop-blur-sm z-10">
-                                    <div className="w-7 h-7 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
-                                    <span className="text-[11px] font-medium text-muted-foreground">Loading preview...</span>
+                            {/* Instant Preview Image (Loads immediately, zero delay!) */}
+                            {previewImg && (
+                                <img
+                                    src={previewImg}
+                                    alt={`${project.name} preview`}
+                                    className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                                />
+                            )}
+
+                            {/* Scaled Live Iframe Overlay (Loads on hover/in background) */}
+                            {hasDemoUrl && (
+                                <div
+                                    className="absolute inset-0 w-full h-full overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                                >
+                                    <div
+                                        style={{
+                                            width: '200%',
+                                            height: '200%',
+                                            transform: 'scale(0.5)',
+                                            transformOrigin: 'top left',
+                                        }}
+                                    >
+                                        <iframe
+                                            src={project.demoUrl}
+                                            title={`${project.name} Live Preview`}
+                                            className={`w-full h-full border-0 transition-opacity duration-700 ${
+                                                iframeLoaded ? 'opacity-100' : 'opacity-0'
+                                            }`}
+                                            loading="lazy"
+                                            sandbox="allow-scripts allow-same-origin allow-popups"
+                                            onLoad={() => setIframeLoaded(true)}
+                                        />
+                                    </div>
                                 </div>
                             )}
 
-                            {/* Scaled-down live iframe background */}
-                            <div
-                                className="w-full h-full relative transition-transform duration-700 ease-out group-hover:scale-[1.02]"
-                                style={{
-                                    width: '200%',
-                                    height: '200%',
-                                    transform: 'scale(0.5)',
-                                    transformOrigin: 'top left',
-                                }}
-                            >
-                                <iframe
-                                    src={project.demoUrl}
-                                    title={`${project.name} Live Preview`}
-                                    className={`w-full h-full border-0 transition-opacity duration-700 ${
-                                        iframeLoaded ? 'opacity-100' : 'opacity-0'
-                                    }`}
-                                    loading="lazy"
-                                    sandbox="allow-scripts allow-same-origin allow-popups"
-                                    onLoad={() => setIframeLoaded(true)}
-                                />
-                            </div>
-
-                            {/* Subtle dark/light glass tint when not hovered - fades out on hover to reveal full live site */}
-                            <div className="absolute inset-0 bg-background/65 dark:bg-background/75 backdrop-blur-[2px] group-hover:opacity-0 group-hover:backdrop-blur-none transition-all duration-500 pointer-events-none z-10" />
+                            {/* Subtle Glass Tint Overlay when NOT hovered - fades out on hover to reveal crisp live site */}
+                            <div className="absolute inset-0 bg-background/60 dark:bg-background/70 backdrop-blur-[2px] group-hover:opacity-0 group-hover:backdrop-blur-none transition-all duration-500 pointer-events-none z-10" />
                         </div>
                     )}
 
-                    {/* Code Pattern Decorative Background for projects without demoUrl */}
-                    {!hasDemoUrl && (
+                    {/* Code Pattern Decorative Background for projects without demoUrl or previewImg */}
+                    {!hasDemoUrl && !previewImg && (
                         <div className="absolute inset-0 bottom-[52px] z-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/10 flex items-center justify-center overflow-hidden">
                             <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.07] bg-[radial-gradient(#3178c6_1px,transparent_1px)] [background-size:16px_16px]" />
                             <Code2 className="w-32 h-32 text-primary/10 transition-transform duration-700 group-hover:scale-110 group-hover:rotate-6" />
@@ -71,13 +78,13 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                     <div className="flex-1 relative z-20 p-6 flex flex-col justify-between pointer-events-none">
                         {/* Top Bar Details */}
                         <div className="flex justify-between items-start mb-4 pointer-events-auto">
-                            <div className="flex items-center gap-2.5 bg-background/80 dark:bg-background/85 backdrop-blur-md border border-border/60 px-3 py-1.5 rounded-xl shadow-md group-hover:shadow-primary/20 transition-all duration-300">
+                            <div className="flex items-center gap-2.5 bg-background/85 dark:bg-background/90 backdrop-blur-md border border-border/60 px-3 py-1.5 rounded-xl shadow-md group-hover:shadow-primary/20 transition-all duration-300">
                                 <Github className="w-4 h-4 text-foreground shrink-0" />
                                 <h3 className="font-bold text-base tracking-tight text-foreground">
                                     {project.name}
                                 </h3>
                             </div>
-                            <div className="flex items-center text-xs font-semibold text-muted-foreground bg-background/80 dark:bg-background/85 backdrop-blur-md border border-border/60 px-2.5 py-1.5 rounded-xl shadow-md">
+                            <div className="flex items-center text-xs font-semibold text-muted-foreground bg-background/85 dark:bg-background/90 backdrop-blur-md border border-border/60 px-2.5 py-1.5 rounded-xl shadow-md">
                                 <Star className="w-3.5 h-3.5 mr-1 fill-yellow-500 stroke-yellow-500" />
                                 {project.stars}
                             </div>
@@ -87,7 +94,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                         <div className={`mt-auto transition-all duration-500 ${
                             hasDemoUrl ? 'group-hover:opacity-0 group-hover:translate-y-2' : ''
                         }`}>
-                            <div className="p-4 rounded-xl bg-background/80 dark:bg-background/85 backdrop-blur-md border border-border/60 shadow-lg">
+                            <div className="p-4 rounded-xl bg-background/85 dark:bg-background/90 backdrop-blur-md border border-border/60 shadow-lg">
                                 <p className="text-muted-foreground text-xs leading-relaxed font-medium">
                                     {project.description}
                                 </p>
@@ -173,3 +180,4 @@ export function GithubShowcase() {
         </section>
     );
 }
+
