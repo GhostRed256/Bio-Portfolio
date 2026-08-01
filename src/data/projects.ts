@@ -3,6 +3,7 @@ export type Project = {
     description: string;
     repoUrl: string;
     demoUrl?: string;
+    previewImage?: string; // static screenshot for fast card background
     language: string;
     stars: number;
     color: string; // language color
@@ -46,6 +47,7 @@ export const projects: Project[] = [
         description: "A premium gold-luxury themed booking homestay web application allowing guests to reserve cozy rooms and suites, complete with a comprehensive modern admin and staff portal.",
         repoUrl: "https://github.com/GhostRed256/HotelLuxe",
         demoUrl: "https://stay-n-joy-wine.vercel.app",
+        previewImage: "/previews/staynjoy.jpg",
         language: "TypeScript",
         stars: 0,
         color: "#3178c6"

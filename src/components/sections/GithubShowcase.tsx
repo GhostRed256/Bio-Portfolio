@@ -4,11 +4,10 @@ import { motion } from "framer-motion";
 import { BrowserWindow } from "@/components/ui/BrowserWindow";
 import { projects } from "@/data/projects";
 import { Github, Star, Globe, Code2 } from "lucide-react";
-import { useState } from "react";
 
 function ProjectCard({ project, index }: { project: typeof projects[number]; index: number }) {
-    const [iframeLoaded, setIframeLoaded] = useState(false);
     const hasDemoUrl = Boolean(project.demoUrl);
+    const hasPreview = Boolean(project.previewImage);
 
     return (
         <motion.div
@@ -18,52 +17,29 @@ function ProjectCard({ project, index }: { project: typeof projects[number]; ind
             transition={{ delay: index * 0.08, duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
             className="h-full"
         >
-            <BrowserWindow url={project.demoUrl || project.repoUrl} className={`h-full bg-background ${hasDemoUrl ? 'min-h-[380px]' : 'min-h-[280px]'}`}>
+            <BrowserWindow url={project.demoUrl || project.repoUrl} className={`h-full bg-background ${hasPreview ? 'min-h-[380px]' : 'min-h-[280px]'}`}>
                 <div className="flex flex-col h-full" style={{ transformStyle: 'preserve-3d' }}>
                     {/* Main content area */}
                     <div className="flex-1 relative overflow-hidden">
 
-                        {/* === BACKGROUND IFRAME (always rendered for demo projects) === */}
-                        {hasDemoUrl && (
-                            <>
-                                {/* Loading skeleton while iframe loads */}
-                                {!iframeLoaded && (
-                                    <div className="absolute inset-0 z-0 flex flex-col items-center justify-center gap-3 bg-muted/30">
-                                        <div className="w-8 h-8 border-2 border-primary/20 border-t-primary rounded-full animate-spin" />
-                                        <span className="text-xs text-muted-foreground">Loading preview...</span>
-                                    </div>
-                                )}
-
-                                {/* Scaled iframe as card background */}
-                                <div className="absolute inset-0 z-0 overflow-hidden">
-                                    <div
-                                        style={{
-                                            width: '250%',
-                                            height: '250%',
-                                            transform: 'scale(0.4)',
-                                            transformOrigin: 'top left',
-                                            pointerEvents: 'none',
-                                        }}
-                                    >
-                                        <iframe
-                                            src={project.demoUrl}
-                                            title={`${project.name} Preview`}
-                                            className={`w-full h-full border-0 transition-opacity duration-700 ${iframeLoaded ? 'opacity-100' : 'opacity-0'}`}
-                                            loading="lazy"
-                                            sandbox="allow-scripts allow-same-origin"
-                                            onLoad={() => setIframeLoaded(true)}
-                                            tabIndex={-1}
-                                        />
-                                    </div>
-                                </div>
-                            </>
+                        {/* === STATIC PREVIEW IMAGE as card background (instant load) === */}
+                        {hasPreview && (
+                            <div className="absolute inset-0 z-0">
+                                <img
+                                    src={project.previewImage}
+                                    alt={`${project.name} preview`}
+                                    className="w-full h-full object-cover object-top"
+                                    loading="lazy"
+                                    decoding="async"
+                                />
+                            </div>
                         )}
 
-                        {/* === GLASS OVERLAY with project info (floats on top of iframe) === */}
+                        {/* === GLASS OVERLAY with project info === */}
                         <div
                             className={`relative z-10 p-6 flex flex-col h-full transition-all duration-500 ${
-                                hasDemoUrl
-                                    ? 'bg-background/70 dark:bg-background/75 backdrop-blur-md hover:bg-background/40 dark:hover:bg-background/40 hover:backdrop-blur-sm'
+                                hasPreview
+                                    ? 'bg-background/70 dark:bg-background/75 backdrop-blur-md hover:bg-background/30 dark:hover:bg-background/35 hover:backdrop-blur-[2px]'
                                     : ''
                             }`}
                         >
@@ -108,7 +84,7 @@ function ProjectCard({ project, index }: { project: typeof projects[number]; ind
                         </div>
                     </div>
 
-                    {/* Footer bar - always visible */}
+                    {/* Footer bar */}
                     <div className="px-6 py-3.5 border-t border-border flex items-center justify-between bg-background/90 backdrop-blur-sm z-20 relative">
                         <div className="flex items-center gap-2 text-xs font-medium">
                             <span className="w-3 h-3 rounded-full shadow-sm" style={{ backgroundColor: project.color }} />
