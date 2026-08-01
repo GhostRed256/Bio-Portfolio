@@ -15,8 +15,8 @@ export default function Home() {
       <FloatingBalloons />
       <ThemeDial />
       <Hero />
-      <ArtGallery />
       <GithubShowcase />
+      <ArtGallery />
       <Contact />
     </div>
   );
