@@ -11,7 +11,7 @@ export type Project = {
 export const projects: Project[] = [
     {
         name: "Bio-Portfolio",
-        description: "My personal portfolio website built with Next.js, React, and Tailwind CSS. Features smooth animations and a premium design.",
+        description: "An immersive, weather-responsive digital garden featuring real-time atmospheric physics, dynamic theme transformations, 3D interactive tilt cards, and retro arcade mini-games.",
         repoUrl: "https://github.com/GhostRed256/Bio-Portfolio",
         demoUrl: "https://bio-portfolio-seven.vercel.app",
         language: "TypeScript",
@@ -20,7 +20,7 @@ export const projects: Project[] = [
     },
     {
         name: "LinkedInAutomator",
-        description: "A LinkedIn automation tool designed for offline use, built with Golang to streamline professional networking tasks.",
+        description: "A high-performance, offline-first automation engine built in Go to effortlessly scale professional networking, connection requests, and lead outreach with sub-millisecond execution.",
         repoUrl: "https://github.com/GhostRed256/LinkedInAutomator",
         language: "Go",
         stars: 0,
@@ -28,7 +28,7 @@ export const projects: Project[] = [
     },
     {
         name: "rubiks-cube-solver",
-        description: "Real-time Rubik's Cube solver using Python and webcam computer vision techniques.",
+        description: "Real-time 3D Rubik's Cube computer vision solver powered by OpenCV and algorithmic color extraction for instant step-by-step 3D solution tracking via live webcam.",
         repoUrl: "https://github.com/GhostRed256/rubiks-cube-solver",
         language: "Python",
         stars: 0,
@@ -36,7 +36,7 @@ export const projects: Project[] = [
     },
     {
         name: "MyFriendApp",
-        description: "AI companion app powered by the Gemini API, developed using Jetpack Compose and Kotlin for a modern Android experience.",
+        description: "A smart, empathetic AI companion for Android built with Kotlin & Jetpack Compose, leveraging Google's Gemini API for context-aware conversational intelligence.",
         repoUrl: "https://github.com/GhostRed256/MyFriendApp",
         language: "Kotlin",
         stars: 0,
@@ -44,7 +44,7 @@ export const projects: Project[] = [
     },
     {
         name: "StayNJoy Homestay",
-        description: "A premium gold-luxury themed booking homestay web application allowing guests to reserve cozy rooms and suites, complete with a comprehensive modern admin and staff portal.",
+        description: "A gold-luxury homestay booking platform featuring real-time room reservations, interactive suite showcases, and an enterprise admin & staff operations portal.",
         repoUrl: "https://github.com/GhostRed256/HotelLuxe",
         demoUrl: "https://stay-n-joy-wine.vercel.app",
         language: "TypeScript",
@@ -53,7 +53,7 @@ export const projects: Project[] = [
     },
     {
         name: "Semantic_Segmentation",
-        description: "Brain tumor detection using semantic segmentation techniques, implemented in Jupyter Notebooks with Python.",
+        description: "Deep learning medical imaging pipeline for automated brain tumor detection and pixel-level tumor boundary delineation using U-Net semantic segmentation architecture.",
         repoUrl: "https://github.com/GhostRed256/Semantic_Segmentation",
         language: "Jupyter Notebook",
         stars: 0,
@@ -61,7 +61,7 @@ export const projects: Project[] = [
     },
     {
         name: "TravelNJoy",
-        description: "A comprehensive travel booking platform and website.",
+        description: "A premium second-hand car marketplace platform allowing buyers to explore verified pre-owned vehicles with detailed specs, price estimates, and seamless owner connection.",
         repoUrl: "https://github.com/GhostRed256/TravelNJoy",
         demoUrl: "https://travel-n-joy.vercel.app",
         language: "TypeScript",
@@ -70,7 +70,7 @@ export const projects: Project[] = [
     },
     {
         name: "TradingCourseSellingWebsite",
-        description: "A website for selling trading courses and educational content.",
+        description: "An ed-tech trading platform designed for financial mastery, offering high-yield technical analysis courses, interactive video modules, and instant enrollment.",
         repoUrl: "https://github.com/GhostRed256/TradingCourseSellingWebsite",
         demoUrl: "https://emergingtrader80.vercel.app/",
         language: "TypeScript",
@@ -79,7 +79,7 @@ export const projects: Project[] = [
     },
     {
         name: "FoodNJoy",
-        description: "A modern food delivery web app with a sleek UI, real-time order tracking, and a smooth checkout experience.",
+        description: "A lightning-fast food delivery platform featuring real-time order tracking, interactive menu customization, and an ultra-frictionless checkout experience.",
         repoUrl: "https://github.com/GhostRed256/FoodDelievryApp",
         demoUrl: "https://food-n-joy.vercel.app/",
         language: "TypeScript",
@@ -87,3 +87,4 @@ export const projects: Project[] = [
         color: "#3178c6"
     }
 ];
+
