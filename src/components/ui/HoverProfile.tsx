@@ -42,9 +42,9 @@ export function HoverProfile({ type, href, children }: HoverProfileProps) {
 
     const data = {
         github: {
-            name: "GhostRed256",
+            name: "Ritesh Dey",
             username: "@GhostRed256",
-            bio: "Casual developer who does Android dev and Machine Learning, currently doing Fullstack using MERN stack.",
+            bio: "Full-Stack Engineer, Android Developer & AI/ML Creator building modern, high-performance web and mobile applications.",
             location: "India",
             stats: [
                 { label: "Repos", value: "10+" },
@@ -55,18 +55,18 @@ export function HoverProfile({ type, href, children }: HoverProfileProps) {
         linkedin: {
             name: "Ritesh Dey",
             username: "Full Stack Developer",
-            bio: "Casual developer who does Android dev and Machine Learning, currently doing Fullstack using MERN stack.",
+            bio: "Full-Stack Engineer specialized in React, Next.js, Go, Kotlin, and modern cloud architectures.",
             location: "India",
             stats: [
                 { label: "Connections", value: "500+" },
-                { label: "Views", value: "120" },
+                { label: "Views", value: "120+" },
             ],
             icon: <Linkedin className="w-4 h-4" />
         },
         instagram: {
             name: "Ritesh Dey",
             username: "@mr.riteshdey",
-            bio: "Casual developer who does Android dev and Machine Learning, currently doing Fullstack using MERN stack.",
+            bio: "Creative coder, photographer, and visual artist exploring digital art and generative design.",
             location: "India",
             stats: [
                 { label: "Posts", value: "50+" },
