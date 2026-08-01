@@ -57,5 +57,31 @@ export const projects: Project[] = [
         language: "Jupyter Notebook",
         stars: 0,
         color: "#DA5B0B"
+    },
+    {
+        name: "TravelNJoy",
+        description: "A comprehensive travel booking platform and website.",
+        repoUrl: "https://github.com/GhostRed256/TravelNJoy",
+        language: "TypeScript",
+        stars: 0,
+        color: "#3178c6"
+    },
+    {
+        name: "TradingCourseSellingWebsite",
+        description: "A website for selling trading courses and educational content.",
+        repoUrl: "https://github.com/GhostRed256/TradingCourseSellingWebsite",
+        demoUrl: "https://emergingtrader80.vercel.app/",
+        language: "TypeScript",
+        stars: 0,
+        color: "#3178c6"
+    },
+    {
+        name: "FoodNJoy",
+        description: "A modern food delivery web app with a sleek UI, real-time order tracking, and a smooth checkout experience.",
+        repoUrl: "https://github.com/GhostRed256/FoodDelievryApp",
+        demoUrl: "https://food-n-joy.vercel.app/",
+        language: "TypeScript",
+        stars: 0,
+        color: "#3178c6"
     }
 ];
