@@ -12,8 +12,10 @@ export type Project = {
 export const projects: Project[] = [
     {
         name: "Bio-Portfolio",
-        description: "My personal portfolio website built with Next.js, React, and Tailwind CSS. Features smooth animations and a premium design.",
-        repoUrl: "https://github.com/GhostRed256/Bio-Portfolio", // Assuming repo name
+        description: "Yo dawg, we heard you like portfolios, so we put a portfolio preview inside your portfolio so you can view your portfolio while viewing your portfolio!",
+        repoUrl: "https://github.com/GhostRed256/Bio-Portfolio",
+        demoUrl: "https://bio-portfolio-seven.vercel.app",
+        previewImage: "/previews/portfolio.jpg",
         language: "TypeScript",
         stars: 0,
         color: "#3178c6"
@@ -62,8 +64,9 @@ export const projects: Project[] = [
     },
     {
         name: "TravelNJoy",
-        description: "A comprehensive travel booking platform and website.",
+        description: "A premium used car marketplace with verified listings, 150-point inspections, transparent pricing, and a sleek modern UI.",
         repoUrl: "https://github.com/GhostRed256/TravelNJoy",
+        previewImage: "/previews/travelnjoy.jpg",
         language: "TypeScript",
         stars: 0,
         color: "#3178c6"
@@ -73,6 +76,7 @@ export const projects: Project[] = [
         description: "A website for selling trading courses and educational content.",
         repoUrl: "https://github.com/GhostRed256/TradingCourseSellingWebsite",
         demoUrl: "https://emergingtrader80.vercel.app/",
+        previewImage: "/previews/trading.jpg",
         language: "TypeScript",
         stars: 0,
         color: "#3178c6"
@@ -82,6 +86,7 @@ export const projects: Project[] = [
         description: "A modern food delivery web app with a sleek UI, real-time order tracking, and a smooth checkout experience.",
         repoUrl: "https://github.com/GhostRed256/FoodDelievryApp",
         demoUrl: "https://food-n-joy.vercel.app/",
+        previewImage: "/previews/foodnjoy.jpg",
         language: "TypeScript",
         stars: 0,
         color: "#3178c6"
