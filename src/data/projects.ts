@@ -16,7 +16,7 @@ export const projects: Project[] = [
         description: "An immersive, weather-responsive digital garden featuring real-time atmospheric physics, dynamic theme transformations, 3D interactive tilt cards, and retro arcade mini-games.",
         repoUrl: "https://github.com/GhostRed256/Bio-Portfolio",
         demoUrl: "https://bio-portfolio-seven.vercel.app",
-        previewImg: "/previews/portfolio.jpg",
+        previewImg: "/previews/portfolio.webp",
         language: "TypeScript",
         stars: 0,
         color: "#3178c6"
@@ -26,7 +26,7 @@ export const projects: Project[] = [
         description: "A gold-luxury homestay booking platform featuring real-time room reservations, interactive suite showcases, and an enterprise admin & staff operations portal.",
         repoUrl: "https://github.com/GhostRed256/HotelLuxe",
         demoUrl: "https://stay-n-joy-wine.vercel.app",
-        previewImg: "/previews/staynjoy.jpg",
+        previewImg: "/previews/staynjoy.webp",
         language: "TypeScript",
         stars: 0,
         color: "#3178c6"
@@ -36,7 +36,7 @@ export const projects: Project[] = [
         description: "A premium second-hand car marketplace platform allowing buyers to explore verified pre-owned vehicles with detailed specs, price estimates, and seamless owner connection.",
         repoUrl: "https://github.com/GhostRed256/TravelNJoy",
         demoUrl: "https://travel-n-joy.vercel.app",
-        previewImg: "/previews/travelnjoy.jpg",
+        previewImg: "/previews/travelnjoy.webp",
         language: "TypeScript",
         stars: 0,
         color: "#3178c6"
@@ -46,7 +46,7 @@ export const projects: Project[] = [
         description: "An ed-tech trading platform designed for financial mastery, offering high-yield technical analysis courses, interactive video modules, and instant enrollment.",
         repoUrl: "https://github.com/GhostRed256/TradingCourseSellingWebsite",
         demoUrl: "https://emergingtrader80.vercel.app/",
-        previewImg: "/previews/trading.jpg",
+        previewImg: "/previews/trading.webp",
         language: "TypeScript",
         stars: 0,
         color: "#3178c6"
@@ -56,7 +56,7 @@ export const projects: Project[] = [
         description: "A lightning-fast food delivery platform featuring real-time order tracking, interactive menu customization, and an ultra-frictionless checkout experience.",
         repoUrl: "https://github.com/GhostRed256/FoodDelievryApp",
         demoUrl: "https://food-n-joy.vercel.app/",
-        previewImg: "/previews/foodnjoy.jpg",
+        previewImg: "/previews/foodnjoy.webp",
         language: "TypeScript",
         stars: 0,
         color: "#3178c6"

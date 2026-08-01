@@ -4,8 +4,10 @@ import { motion } from "framer-motion";
 import { BrowserWindow } from "@/components/ui/BrowserWindow";
 import { projects, Project } from "@/data/projects";
 import { Github, Star, Globe, Code2 } from "lucide-react";
+import { useState } from "react";
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
+    const [imgLoaded, setImgLoaded] = useState(false);
     const hasDemoUrl = Boolean(project.demoUrl);
     const previewImg = project.previewImg;
 
@@ -23,10 +25,22 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                     {/* Website Preview Image Background */}
                     {previewImg && (
                         <div className="absolute inset-0 bottom-[52px] z-0 overflow-hidden bg-muted/30">
+                            {/* Shimmering Skeleton Loader */}
+                            {!imgLoaded && (
+                                <div className="absolute inset-0 bg-gradient-to-r from-muted/50 via-muted to-muted/50 animate-pulse z-0 flex items-center justify-center">
+                                    <div className="w-8 h-8 rounded-full border-2 border-primary/20 border-t-primary animate-spin" />
+                                </div>
+                            )}
+
                             <img
                                 src={previewImg}
                                 alt={`${project.name} preview`}
-                                className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+                                loading="lazy"
+                                decoding="async"
+                                onLoad={() => setImgLoaded(true)}
+                                className={`w-full h-full object-cover object-top transition-all duration-700 ease-out group-hover:scale-[1.05] ${
+                                    imgLoaded ? 'opacity-100' : 'opacity-0'
+                                }`}
                             />
 
                             {/* Glass Overlay - slight tint when idle, clears on hover */}
