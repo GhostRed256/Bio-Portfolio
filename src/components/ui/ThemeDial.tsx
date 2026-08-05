@@ -61,6 +61,8 @@ export function ThemeDial() {
                 className="relative w-14 h-14 rounded-full bg-white/30 dark:bg-black/30 backdrop-blur-xl border border-white/40 dark:border-white/20 shadow-lg flex items-center justify-center overflow-hidden group"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                aria-label="Toggle theme menu"
+                aria-expanded={isOpen}
             >
                 {/* Animated gradient ring */}
                 <motion.div
@@ -105,6 +107,7 @@ export function ThemeDial() {
                                     <button
                                         onClick={resetToAuto}
                                         className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                                        aria-label="Reset to auto theme"
                                     >
                                         <RotateCcw size={12} />
                                         Auto
@@ -117,6 +120,7 @@ export function ThemeDial() {
                                 <button
                                     onClick={handlePrev}
                                     className="p-1 rounded-full hover:bg-white/30 dark:hover:bg-white/10 transition-colors"
+                                    aria-label="Previous theme"
                                 >
                                     <ChevronLeft size={20} />
                                 </button>
@@ -134,6 +138,7 @@ export function ThemeDial() {
                                 <button
                                     onClick={handleNext}
                                     className="p-1 rounded-full hover:bg-white/30 dark:hover:bg-white/10 transition-colors"
+                                    aria-label="Next theme"
                                 >
                                     <ChevronRight size={20} />
                                 </button>
@@ -152,6 +157,8 @@ export function ThemeDial() {
                                                 ? 'bg-primary w-4'
                                                 : 'bg-foreground/20 hover:bg-foreground/40'
                                             }`}
+                                        aria-label={'Select ' + themeLabels[t] + ' theme'}
+                                        aria-current={i === currentIndex}
                                     />
                                 ))}
                             </div>
@@ -165,6 +172,9 @@ export function ThemeDial() {
                             <button
                                 onClick={toggleDayNight}
                                 className="relative w-16 h-8 rounded-full bg-gradient-to-r from-amber-300 to-amber-500 dark:from-indigo-600 dark:to-purple-800 p-1 transition-all"
+                                aria-label={'Switch to ' + (isDay ? 'Night' : 'Day') + ' Mode'}
+                                role="switch"
+                                aria-checked={!isDay}
                             >
                                 <motion.div
                                     className="w-6 h-6 rounded-full bg-white shadow-md flex items-center justify-center"

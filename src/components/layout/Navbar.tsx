@@ -103,6 +103,8 @@ export function Navbar() {
                     <button
                         className="md:hidden p-2 text-foreground"
                         onClick={() => setIsOpen(!isOpen)}
+                        aria-label={isOpen ? "Close menu" : "Open menu"}
+                        aria-expanded={isOpen}
                     >
                         {isOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>
