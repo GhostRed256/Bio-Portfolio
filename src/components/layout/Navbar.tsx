@@ -95,7 +95,7 @@ export function Navbar() {
                             href="#contact"
                             className="px-5 py-2.5 bg-primary text-primary-foreground rounded-full text-sm font-bold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all"
                         >
-                            Let's Talk
+                            Let&apos;s Talk
                         </Link>
                     </div>
 
@@ -103,6 +103,8 @@ export function Navbar() {
                     <button
                         className="md:hidden p-2 text-foreground"
                         onClick={() => setIsOpen(!isOpen)}
+                        aria-label={isOpen ? "Close menu" : "Open menu"}
+                        aria-expanded={isOpen}
                     >
                         {isOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>
@@ -133,7 +135,7 @@ export function Navbar() {
                                     className="inline-block text-center w-full px-4 py-3 bg-primary text-primary-foreground rounded-lg text-lg font-medium hover:opacity-90 transition-opacity font-bold"
                                     onClick={() => setIsOpen(false)}
                                 >
-                                    Let's Talk
+                                    Let&apos;s Talk
                                 </Link>
                             </div>
                         </motion.div>
