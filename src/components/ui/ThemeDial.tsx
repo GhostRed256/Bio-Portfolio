@@ -58,6 +58,8 @@ export function ThemeDial() {
             {/* Main Dial Button */}
             <motion.button
                 onClick={() => setIsOpen(!isOpen)}
+                aria-label={isOpen ? "Close theme settings" : "Open theme settings"}
+                aria-expanded={isOpen}
                 className="relative w-14 h-14 rounded-full bg-white/30 dark:bg-black/30 backdrop-blur-xl border border-white/40 dark:border-white/20 shadow-lg flex items-center justify-center overflow-hidden group"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -104,6 +106,7 @@ export function ThemeDial() {
                                 {isManualOverride && (
                                     <button
                                         onClick={resetToAuto}
+                                        aria-label="Reset to automatic theme"
                                         className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
                                     >
                                         <RotateCcw size={12} />
@@ -116,6 +119,7 @@ export function ThemeDial() {
                             <div className="flex items-center justify-between bg-white/30 dark:bg-black/30 rounded-xl p-3">
                                 <button
                                     onClick={handlePrev}
+                                    aria-label="Previous theme"
                                     className="p-1 rounded-full hover:bg-white/30 dark:hover:bg-white/10 transition-colors"
                                 >
                                     <ChevronLeft size={20} />
@@ -133,6 +137,7 @@ export function ThemeDial() {
 
                                 <button
                                     onClick={handleNext}
+                                    aria-label="Next theme"
                                     className="p-1 rounded-full hover:bg-white/30 dark:hover:bg-white/10 transition-colors"
                                 >
                                     <ChevronRight size={20} />
@@ -148,6 +153,7 @@ export function ThemeDial() {
                                             setCurrentIndex(i);
                                             setTheme(t);
                                         }}
+                                        aria-label={`Select ${themeLabels[t]} theme`}
                                         className={`w-2 h-2 rounded-full transition-all ${i === currentIndex
                                                 ? 'bg-primary w-4'
                                                 : 'bg-foreground/20 hover:bg-foreground/40'
@@ -164,6 +170,7 @@ export function ThemeDial() {
                             </span>
                             <button
                                 onClick={toggleDayNight}
+                                aria-label={`Toggle to ${isDay ? 'night' : 'day'} mode`}
                                 className="relative w-16 h-8 rounded-full bg-gradient-to-r from-amber-300 to-amber-500 dark:from-indigo-600 dark:to-purple-800 p-1 transition-all"
                             >
                                 <motion.div
